@@ -36,7 +36,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; font-size: clamp(16px, calc(10px + 0.42vw), 22px); }  /* grows on big monitors: ~18px at 1920, ~21px at 2560 */
 body {
   margin: 0; background: var(--bg); color: var(--fg);
   font-family: var(--font-body); font-size: 1.06rem; line-height: 1.65;
@@ -95,7 +95,7 @@ header.bar {
 }
 header.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.65rem; }
 .mark { display: inline-flex; align-items: center; gap: 0.65rem; text-decoration: none; color: var(--fg); white-space: nowrap; }
-.mark img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold); filter: none; }
+.mark img { width: 1.9rem; height: 1.9rem; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold); filter: none; }
 .mark b { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.12em; font-size: 0.95rem; }
 .mark span { font-family: var(--font-mono); color: var(--muted); font-size: 0.8rem; }
 nav { display: flex; align-items: center; gap: 0.15rem; }
@@ -179,7 +179,7 @@ h1 .gilt {
 .btn:hover svg { transform: translateY(2px); }
 
 /* astrolabe portrait */
-.portrait { position: relative; width: min(100%, 360px); aspect-ratio: 1; justify-self: center; max-width: 100%; }
+.portrait { position: relative; width: min(100%, 22.5rem); aspect-ratio: 1; justify-self: center; max-width: 100%; }
 .astro { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .astro .ring { fill: none; stroke: var(--gold); }
 .astro .faint { stroke: var(--line); }
@@ -210,7 +210,7 @@ h1 .gilt {
 .orbit { position: absolute; inset: 0; animation: spin 60s linear infinite; }
 .orbit span {
   position: absolute; left: 50%; top: 50%; width: 0; height: 0;
-  transform: rotate(var(--a)) translateX(var(--rad, 176px)) rotate(calc(-1 * var(--a)));
+  transform: rotate(var(--a)) translateX(var(--rad, 11rem)) rotate(calc(-1 * var(--a)));
 }
 .orbit em {
   position: absolute; left: 0; top: 0; translate: -50% -50%; display: block; white-space: nowrap;
