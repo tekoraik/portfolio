@@ -139,11 +139,11 @@ nav a.active { color: var(--fg); }
 nav a.active::before, nav a.active::after, nav a:hover::before, nav a:hover::after { opacity: 1; transform: none; }
 .lang-btn {
   margin-left: 0.5rem; font: 0.8rem/1 var(--font-mono); letter-spacing: 0.1em; color: var(--gold);
-  background: transparent; border: 1px solid var(--gold); padding: 0.45rem 0.7rem; cursor: pointer;
+  background: transparent; border: 1px solid var(--gold); height: 2.1rem; padding: 0 0.7rem; display: inline-grid; place-items: center; box-sizing: border-box; cursor: pointer;
   transition: background-color .25s, color .25s;
 }
 .lang-btn:hover { background: var(--gold); color: var(--bg); }
-.theme-btn { margin-left: 0.4rem; display: inline-grid; place-items: center; width: 2.1rem; height: 2.1rem; padding: 0; }
+.theme-btn { margin-left: 0.4rem; width: 2.1rem; padding: 0; }
 .theme-btn svg { width: 1rem; height: 1rem; }
 .theme-btn .sun { display: none; }
 :root[data-theme="light"] .theme-btn .sun, :root[data-theme="light"] .theme-btn .moon { display: none; }
