@@ -22,6 +22,10 @@
   --line: #183427;
   --gold: #3ee68f;        /* primary phosphor green */
   --verd: #b6ff6a;        /* AI accent: lime */
+  --blue: #5aa9ff;
+  --violet: #a77bff;
+  --pink: #ff6fc8;
+  --holo: linear-gradient(135deg, var(--blue), var(--violet) 50%, var(--pink));
   --gold-soft: rgba(62, 230, 143, 0.12);
   --verd-soft: rgba(182, 255, 106, 0.12);
   --glow: rgba(62, 230, 143, 0.16);
@@ -86,8 +90,8 @@ body::before {
 .progress {
   position: fixed; top: env(safe-area-inset-top, 0px); left: 0; height: 2px; width: 100%; z-index: 31;
   transform-origin: 0 50%; transform: scaleX(var(--scroll, 0));
-  background: linear-gradient(90deg, var(--gold), var(--verd));
-  box-shadow: 0 0 10px var(--verd);
+  background: linear-gradient(90deg, var(--gold), var(--blue), var(--violet), var(--pink));
+  box-shadow: 0 0 10px var(--violet);
 }
 header.bar {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
@@ -98,7 +102,7 @@ header.bar {
 }
 header.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.65rem; }
 .mark { display: inline-flex; align-items: center; gap: 0.65rem; text-decoration: none; color: var(--fg); white-space: nowrap; }
-.mark img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold); filter: grayscale(1) sepia(.35) hue-rotate(85deg) saturate(1.6); }
+.mark img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold); filter: none; }
 .mark b { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.12em; font-size: 0.95rem; }
 .mark span { font-family: var(--font-mono); color: var(--muted); font-size: 0.8rem; }
 nav { display: flex; align-items: center; gap: 0.15rem; }
@@ -126,7 +130,9 @@ nav a.active::before, nav a.active::after, nav a:hover::before, nav a:hover::aft
 .hero::after {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(55% 65% at 75% 45%, var(--glow), transparent 70%),
+    radial-gradient(40% 50% at 78% 45%, rgba(167, 123, 255, 0.18), transparent 70%),
+    radial-gradient(30% 40% at 88% 70%, rgba(255, 111, 200, 0.10), transparent 70%),
+    radial-gradient(55% 65% at 70% 40%, rgba(90, 169, 255, 0.10), transparent 70%),
     linear-gradient(180deg, transparent 65%, var(--bg) 100%),
     linear-gradient(color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px) 0 0 / 44px 44px,
     linear-gradient(90deg, color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px) 0 0 / 44px 44px;
@@ -149,7 +155,7 @@ h1 {
   text-shadow: 0 0 28px var(--glow);
 }
 h1 .gilt {
-  background: linear-gradient(100deg, var(--gold) 0%, color-mix(in srgb, var(--gold) 45%, #effff6) 35%, var(--gold) 55%, var(--verd) 100%);
+  background: linear-gradient(100deg, var(--gold) 0%, var(--blue) 35%, var(--violet) 65%, var(--pink) 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
   background-size: 250% 100%; animation: gild 7s ease-in-out infinite alternate;
 }
@@ -193,13 +199,17 @@ h1 .gilt {
 @keyframes spin { to { transform: rotate(360deg); } }
 .portrait .photo {
   position: absolute; inset: 27%; border-radius: 50%; overflow: hidden; background: var(--surface);
-  box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--gold), 0 0 0 10px var(--bg), 0 0 0 11px var(--line), 0 20px 60px -10px var(--glow);
+  box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--violet), 0 0 0 10px var(--bg), 0 0 0 11px var(--line), 0 0 50px -6px rgba(167, 123, 255, 0.45), 0 20px 60px -10px rgba(255, 111, 200, 0.25);
 }
-.portrait .photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1) sepia(.35) hue-rotate(85deg) saturate(1.6) contrast(1.1) brightness(.95); transition: filter .6s; }
-.portrait:hover .photo img { filter: none; }
+.portrait .photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.05) contrast(1.06); transition: filter .6s; }
+.portrait .photo::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: 50%;
+  background: var(--holo); mix-blend-mode: soft-light; opacity: .85; transition: opacity .6s;
+}
+.portrait:hover .photo::before { opacity: .35; }
 .portrait .photo::after {
   content: ""; position: absolute; left: 0; right: 0; height: 30%; top: -30%;
-  background: linear-gradient(180deg, transparent, var(--verd-soft) 70%, color-mix(in srgb, var(--verd) 55%, transparent) 98%, transparent);
+  z-index: 2; background: linear-gradient(180deg, transparent, rgba(167, 123, 255, 0.18) 70%, color-mix(in srgb, var(--pink) 60%, transparent) 98%, transparent);
   animation: scan 4.5s var(--ease) infinite; mix-blend-mode: screen;
 }
 @keyframes scan { 0% { top: -30%; } 60%, 100% { top: 110%; } }
@@ -424,7 +434,7 @@ footer b { font-family: var(--font-roman); color: var(--gold); font-weight: 600;
       <svg class="astro" viewBox="0 0 360 360" aria-hidden="true">
         <g class="spin"><circle class="ring" cx="180" cy="180" r="176" stroke-width="1.2"/><g id="ticks"></g></g>
         <g class="spin rev"><circle class="ring faint" cx="180" cy="180" r="148" stroke-width="1"/><circle class="ring" cx="180" cy="180" r="132" stroke-width=".8" stroke-dasharray="2 6"/><g id="numerals"></g></g>
-        <g class="spin fast"><path class="ring verd" d="M180 66 A114 114 0 0 1 294 180" stroke-width="2" stroke-linecap="round"/><circle cx="180" cy="66" r="3.5" fill="currentColor" style="color:var(--verd)"/></g>
+        <g class="spin fast"><path class="ring" d="M180 66 A114 114 0 0 1 294 180" stroke-width="2" stroke-linecap="round" style="stroke:var(--pink)"/><circle cx="180" cy="66" r="3.5" style="fill:var(--pink)"/></g>
       </svg>
       <div class="photo"><img src="photo.png" alt="José Luis Orta Durán" width="100" height="100"></div>
       <div class="orbit" aria-hidden="true">
@@ -818,6 +828,7 @@ footer b { font-family: var(--font-roman); color: var(--gold); font-weight: 600;
     colors.verd = cs.getPropertyValue('--verd').trim();
     colors.muted = cs.getPropertyValue('--muted').trim();
     colors.line = cs.getPropertyValue('--line').trim();
+    colors.hues = ['--gold', '--blue', '--violet', '--pink'].map(function (k) { return cs.getPropertyValue(k).trim(); });
   }
   function size() {
     var r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -874,14 +885,13 @@ footer b { font-family: var(--font-roman); color: var(--gold); font-weight: 600;
       if (d < LINK) {
         ctx.globalAlpha = (1 - d / LINK) * 0.5;
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-        if (!reduce && pulses.length < 18 && Math.random() < 0.0016) pulses.push({ a: a, b: b, t: 0, s: 0.006 + Math.random() * 0.01 });
+        if (!reduce && pulses.length < 18 && Math.random() < 0.0016) pulses.push({ a: a, b: b, t: 0, s: 0.006 + Math.random() * 0.01, c: colors.hues[Math.floor(Math.random() * 4)] });
       }
     }
     ctx.fillStyle = colors.gold; ctx.globalAlpha = 0.85;
     for (i = 0; i < nodes.length; i++) star(nodes[i].x, nodes[i].y, 3.2);
-    ctx.fillStyle = colors.verd;
     for (i = pulses.length - 1; i >= 0; i--) {
-      var p = pulses[i]; p.t += p.s;
+      var p = pulses[i]; p.t += p.s; ctx.fillStyle = p.c;
       if (p.t >= 1) { pulses.splice(i, 1); continue; }
       var x = p.a.x + (p.b.x - p.a.x) * p.t, y = p.a.y + (p.b.y - p.a.y) * p.t;
       ctx.globalAlpha = 0.2; ctx.beginPath(); ctx.arc(x, y, 7, 0, 6.283); ctx.fill();
