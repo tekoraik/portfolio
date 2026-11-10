@@ -55,12 +55,10 @@ html[data-lang="es"] [lang="en"] { display: none !important; }
   padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
 
-/* CRT scanlines + vignette over everything */
+/* vignette over everything; scanlines live only behind the hero text, never over copy */
 .grain {
   position: fixed; inset: 0; z-index: 50; pointer-events: none;
-  background:
-    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.28) 0 1px, transparent 1px 3px),
-    radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
+  background: radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.5) 100%);
 }
 
 /* HUD corner brackets, reused on framed objects */
@@ -125,6 +123,7 @@ nav a.active::before, nav a.active::after, nav a:hover::before, nav a:hover::aft
 .hero::after {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px),
     radial-gradient(40% 50% at 78% 45%, rgba(167, 123, 255, 0.18), transparent 70%),
     radial-gradient(30% 40% at 88% 70%, rgba(255, 111, 200, 0.10), transparent 70%),
     radial-gradient(55% 65% at 70% 40%, rgba(90, 169, 255, 0.10), transparent 70%),
