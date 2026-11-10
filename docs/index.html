@@ -385,6 +385,70 @@ footer b { font-family: var(--font-roman); color: var(--gold); font-weight: 600;
 .top-link { color: var(--muted); text-decoration: none; }
 .top-link:hover { color: var(--gold); }
 
+/* ---------- holographic hues carried through the whole page ----------
+   Each chapter takes one hue (--sec); repeated items cycle through all four. */
+#about { --sec: var(--blue); --sec-soft: rgba(90, 169, 255, 0.10); }
+#experience { --sec: var(--violet); --sec-soft: rgba(167, 123, 255, 0.10); }
+#stack { --sec: var(--pink); --sec-soft: rgba(255, 111, 200, 0.09); }
+#education { --sec: var(--blue); --sec-soft: rgba(90, 169, 255, 0.10); }
+#languages { --sec: var(--violet); --sec-soft: rgba(167, 123, 255, 0.10); }
+main section { background-image: radial-gradient(45% 60% at 100% 0%, var(--sec-soft, transparent), transparent 70%), radial-gradient(35% 50% at 0% 100%, var(--sec-soft, transparent), transparent 70%); }
+.liber { color: var(--sec, var(--verd)); }
+.liber::after { background: linear-gradient(90deg, var(--gold), var(--sec, var(--gold)), transparent); }
+.head h2::after { content: ""; display: block; width: 4.5rem; height: 3px; margin-top: 0.9rem; background: var(--holo); box-shadow: 0 0 14px var(--sec-soft, transparent); }
+section .hud::after { --c: var(--sec, var(--gold)); }
+section .card .ico { color: var(--sec, var(--gold)); border-color: var(--sec, var(--gold)); box-shadow: 0 0 14px var(--sec-soft, transparent); }
+section .card:hover, section .job-card:hover { border-color: color-mix(in srgb, var(--sec, var(--gold)) 55%, var(--line)); box-shadow: var(--shadow), 0 0 30px -10px var(--sec, var(--gold)); }
+section .tag:hover { color: var(--sec, var(--gold)); border-color: var(--sec, var(--gold)); }
+.edu .when b, #about .card h3 { color: var(--sec); }
+
+/* cycle the four hues across repeated items */
+.cards > :nth-child(4n+1), .groups > :nth-child(4n+1), .edu > :nth-child(4n+2) { --sec: var(--blue); --sec-soft: rgba(90, 169, 255, 0.12); }
+.cards > :nth-child(4n+2), .groups > :nth-child(4n+2), .edu > :nth-child(4n+3) { --sec: var(--violet); --sec-soft: rgba(167, 123, 255, 0.12); }
+.cards > :nth-child(4n+3), .groups > :nth-child(4n+3), .edu > :nth-child(4n+4) { --sec: var(--pink); --sec-soft: rgba(255, 111, 200, 0.12); }
+.groups > :nth-child(4n+4), .edu > :nth-child(4n+5) { --sec: var(--gold); --sec-soft: var(--gold-soft); }
+.group h3 { color: var(--sec, var(--gold)); }
+.cards .card.ai, .groups .group.ai, .edu .card.ai { --sec: var(--verd); --sec-soft: var(--verd-soft); }
+
+/* chronicle: holographic spine, each entry its own hue */
+.timeline::after { background: linear-gradient(180deg, var(--gold), var(--blue) 35%, var(--violet) 65%, var(--pink)); box-shadow: 0 0 10px rgba(167, 123, 255, 0.35); }
+.job:nth-child(2) { --sec: var(--blue); --sec-soft: rgba(90, 169, 255, 0.14); }
+.job:nth-child(3) { --sec: var(--violet); --sec-soft: rgba(167, 123, 255, 0.14); }
+.job:nth-child(4) { --sec: var(--pink); --sec-soft: rgba(255, 111, 200, 0.14); }
+.job:nth-child(5) { --sec: var(--gold); --sec-soft: var(--gold-soft); }
+.job:not(.now)::before { border-color: var(--sec); box-shadow: 0 0 10px var(--sec-soft); }
+.job:not(.now) h3 .org, .job:not(.now) .when b { color: var(--sec); }
+.job:not(.now) ul li::before { color: var(--sec); }
+.job:not(.now) .job-card { border-left: 2px solid color-mix(in srgb, var(--sec) 60%, transparent); }
+
+/* stats: one hue each */
+.stat:nth-child(2) strong { color: var(--blue); text-shadow: 0 0 18px rgba(90, 169, 255, 0.35); }
+.stat:nth-child(3) strong { color: var(--violet); text-shadow: 0 0 18px rgba(167, 123, 255, 0.35); }
+.stat:nth-child(4) strong { color: var(--pink); text-shadow: 0 0 18px rgba(255, 111, 200, 0.35); }
+.stat:nth-child(2) .roman { color: var(--blue); }
+.stat:nth-child(3) .roman { color: var(--violet); }
+.stat:nth-child(4) .roman { color: var(--pink); }
+
+/* frieze: holographic rails, separators cycle hues */
+.frieze { border-block-color: transparent; border-image: linear-gradient(90deg, var(--gold), var(--blue), var(--violet), var(--pink)) 1; box-shadow: none; }
+.track i:nth-of-type(4n+1) { color: var(--blue); }
+.track i:nth-of-type(4n+2) { color: var(--violet); }
+.track i:nth-of-type(4n+3) { color: var(--pink); }
+.track span:not(.ai):nth-of-type(5n+2) { color: color-mix(in srgb, var(--blue) 70%, var(--fg)); }
+.track span:not(.ai):nth-of-type(5n+4) { color: color-mix(in srgb, var(--pink) 65%, var(--fg)); }
+
+/* language gauges and footer */
+.meter.seg i { background: repeating-linear-gradient(90deg, transparent 0 calc(100% / var(--n) - 3px), var(--bg) calc(100% / var(--n) - 3px) calc(100% / var(--n))), linear-gradient(90deg, var(--blue), var(--violet), var(--pink)); }
+.lang:nth-child(1) { --sec: var(--blue); }
+.lang:nth-child(2) { --sec: var(--violet); }
+.lang:nth-child(3) { --sec: var(--pink); }
+.lang strong { color: var(--sec); }
+.flourish { color: var(--violet); }
+.flourish::before { background: linear-gradient(90deg, transparent, var(--blue)); }
+.flourish::after { background: linear-gradient(90deg, var(--pink), transparent); }
+footer b { background: var(--holo); -webkit-background-clip: text; background-clip: text; color: transparent; }
+nav a::before, nav a::after { color: var(--violet); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
