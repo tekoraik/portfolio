@@ -7,7 +7,8 @@
 <style>
 /* Layout: "the archive of a far-future scriptorium". One-page codex: an astrolabe portrait over a
    star chart of services, chapters numbered like a manuscript (Liber I–V), HUD brackets on vellum. */
-/* Single committed look: black terminal glass with phosphor greens. */
+/* Dark-first: black terminal glass with phosphor greens. Light: white lab glass with deep inks.
+   Follows the browser setting; the header toggle overrides it (data-theme on <html>). */
 :root {
   --bg: #050806;
   --bg-2: #08100c;
@@ -25,6 +26,8 @@
   --verd-soft: rgba(182, 255, 106, 0.12);
   --glow: rgba(62, 230, 143, 0.16);
   --shadow: 0 0 0 1px rgba(62, 230, 143, 0.08), 0 18px 40px -18px rgba(0, 0, 0, 0.9), 0 0 24px -8px rgba(62, 230, 143, 0.25);
+  --scan: rgba(0, 0, 0, 0.22);
+  --vignette: rgba(0, 0, 0, 0.5);
   --font-display: "Chakra Petch", "Eurostile", "Arial Narrow", sans-serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "Share Tech Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -33,6 +36,26 @@
   --step-3: clamp(2.5rem, 7vw, 4.8rem);
   --ease: cubic-bezier(.2, .7, .2, 1);
   color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+  --bg: #f1f6f3; --bg-2: #e6efea; --surface: #ffffff; --fg: #0b1a13; --muted: #4a6558; --line: #c6d8ce;
+    --gold: #078a52; --verd: #4a7d00; --blue: #1d5fd8; --violet: #6d35d8; --pink: #c81e6f;
+    --gold-soft: rgba(7, 138, 82, 0.10); --verd-soft: rgba(74, 125, 0, 0.10); --glow: rgba(7, 138, 82, 0.12);
+    --shadow: 0 0 0 1px rgba(7, 138, 82, 0.06), 0 16px 34px -18px rgba(11, 26, 19, 0.28), 0 0 22px -10px rgba(109, 53, 216, 0.25);
+    --scan: rgba(11, 26, 19, 0.035);
+    --vignette: rgba(11, 40, 26, 0.07);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f1f6f3; --bg-2: #e6efea; --surface: #ffffff; --fg: #0b1a13; --muted: #4a6558; --line: #c6d8ce;
+  --gold: #078a52; --verd: #4a7d00; --blue: #1d5fd8; --violet: #6d35d8; --pink: #c81e6f;
+  --gold-soft: rgba(7, 138, 82, 0.10); --verd-soft: rgba(74, 125, 0, 0.10); --glow: rgba(7, 138, 82, 0.12);
+  --shadow: 0 0 0 1px rgba(7, 138, 82, 0.06), 0 16px 34px -18px rgba(11, 26, 19, 0.28), 0 0 22px -10px rgba(109, 53, 216, 0.25);
+  --scan: rgba(11, 26, 19, 0.035);
+  --vignette: rgba(11, 40, 26, 0.07);
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -58,7 +81,7 @@ html[data-lang="es"] [lang="en"] { display: none !important; }
 /* vignette over everything; scanlines live only behind the hero text, never over copy */
 .grain {
   position: fixed; inset: 0; z-index: 50; pointer-events: none;
-  background: radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.5) 100%);
+  background: radial-gradient(120% 90% at 50% 50%, transparent 60%, var(--vignette) 100%);
 }
 
 /* HUD corner brackets, reused on framed objects */
@@ -115,6 +138,15 @@ nav a.active::before, nav a.active::after, nav a:hover::before, nav a:hover::aft
   transition: background-color .25s, color .25s;
 }
 .lang-btn:hover { background: var(--gold); color: var(--bg); }
+.theme-btn { margin-left: 0.4rem; display: inline-grid; place-items: center; width: 2.1rem; height: 2.1rem; padding: 0; }
+.theme-btn svg { width: 1rem; height: 1rem; }
+.theme-btn .sun { display: none; }
+:root[data-theme="light"] .theme-btn .sun, :root[data-theme="light"] .theme-btn .moon { display: none; }
+:root[data-theme="light"] .theme-btn .moon { display: block; }
+:root[data-theme="dark"] .theme-btn .sun { display: block; }
+:root[data-theme="dark"] .theme-btn .moon { display: none; }
+@media (prefers-color-scheme: light) { :root:not([data-theme]) .theme-btn .moon { display: block; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme]) .theme-btn .sun { display: block; } :root:not([data-theme]) .theme-btn .moon { display: none; } }
 @media (max-width: 780px) { nav a { display: none; } }
 
 /* ---------- hero ---------- */
@@ -123,7 +155,7 @@ nav a.active::before, nav a.active::after, nav a:hover::before, nav a:hover::aft
 .hero::after {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(0deg, var(--scan) 0 1px, transparent 1px 3px),
     radial-gradient(40% 50% at 78% 45%, rgba(167, 123, 255, 0.18), transparent 70%),
     radial-gradient(30% 40% at 88% 70%, rgba(255, 111, 200, 0.10), transparent 70%),
     radial-gradient(55% 65% at 70% 40%, rgba(90, 169, 255, 0.10), transparent 70%),
@@ -462,6 +494,10 @@ nav a::before, nav a::after { color: var(--violet); }
       <a href="#stack" data-spy="stack"><span lang="en">Arsenal</span><span lang="es">Arsenal</span></a>
       <a href="#education" data-spy="education"><span lang="en">Learning</span><span lang="es">Formación</span></a>
       <button class="lang-btn" id="lang-toggle" type="button" aria-label="Cambiar idioma / Switch language">ES</button>
+      <button class="lang-btn theme-btn" id="theme-toggle" type="button" aria-label="Light / dark theme">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      </button>
     </nav>
   </div>
 </header>
@@ -833,6 +869,27 @@ nav a::before, nav a::after { color: var(--violet); }
   });
   applyLang(saved);
 
+  /* ---- theme: follows the browser until the visitor picks one ---- */
+  var themeBtn = document.getElementById('theme-toggle');
+  var prefersLight = matchMedia('(prefers-color-scheme: light)');
+  function effectiveTheme() { return root.getAttribute('data-theme') || (prefersLight.matches ? 'light' : 'dark'); }
+  function labelTheme() {
+    var t = effectiveTheme();
+    themeBtn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme / Cambiar a tema claro' : 'Switch to dark theme / Cambiar a tema oscuro');
+    themeBtn.title = t === 'dark' ? 'Light / Claro' : 'Dark / Oscuro';
+  }
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem('theme'); } catch (e) {}
+  if (savedTheme === 'light' || savedTheme === 'dark') root.setAttribute('data-theme', savedTheme);
+  labelTheme();
+  themeBtn.addEventListener('click', function () {
+    var next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    labelTheme();
+  });
+  if (prefersLight.addEventListener) prefersLight.addEventListener('change', labelTheme);
+
   /* ---- scroll progress, chronicle fill, active nav ---- */
   var tl = document.getElementById('timeline');
   var links = Array.prototype.slice.call(document.querySelectorAll('nav a[data-spy]'));
@@ -892,6 +949,7 @@ nav a::before, nav a::after { color: var(--violet); }
     colors.verd = cs.getPropertyValue('--verd').trim();
     colors.muted = cs.getPropertyValue('--muted').trim();
     colors.line = cs.getPropertyValue('--line').trim();
+    colors.sweep = cs.colorScheme === 'light' ? 0.06 : 0.14;
     colors.hues = ['--gold', '--blue', '--violet', '--pink'].map(function (k) { return cs.getPropertyValue(k).trim(); });
   }
   function size() {
@@ -929,7 +987,7 @@ nav a::before, nav a::after { color: var(--violet); }
       var sw = (t / 6000) % 1 * 6.283;
       var g = ctx.createConicGradient(sw, cx, cy);
       g.addColorStop(0, colors.verd); g.addColorStop(0.06, 'transparent'); g.addColorStop(1, 'transparent');
-      ctx.globalAlpha = 0.14; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, 520, 0, 6.283); ctx.fill();
+      ctx.globalAlpha = colors.sweep; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, 520, 0, 6.283); ctx.fill();
     }
     /* stars */
     ctx.fillStyle = colors.muted;
@@ -966,7 +1024,7 @@ nav a::before, nav a::after { color: var(--violet); }
   }
   readColors(); size(); frame(0);
   addEventListener('resize', function () { size(); if (reduce) frame(0); });
-  var mq = matchMedia('(prefers-color-scheme: dark)');
+  var mq = matchMedia('(prefers-color-scheme: light)');
   if (mq.addEventListener) mq.addEventListener('change', function () { readColors(); if (reduce) frame(0); });
   new MutationObserver(function () { readColors(); if (reduce) frame(0); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
   if ('IntersectionObserver' in window && !reduce) {
