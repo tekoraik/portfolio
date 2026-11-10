@@ -10,3 +10,4 @@ mkdir -p docs
   sed '1,/^<\/style>$/d' src/content.html
   printf '</body>\n</html>\n'
 } > docs/index.html
+cp src/photo.png docs/photo.png

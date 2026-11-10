@@ -5,405 +5,800 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>José Luis Orta</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="José Luis Orta Durán, Backend Engineering Lead. 15+ years building scalable distributed systems in Go and PHP.">
+<meta name="description" content="José Luis Orta Durán, Backend Engineering Lead. 15+ years building scalable distributed systems in Go and PHP, now with AI-assisted development.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Sans:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: single readable column; a left "event log" rail for experience, mono timestamps like log lines. */
+/* Layout: one-page scroll. Hero with a live "event mesh" canvas (services exchanging messages),
+   then about cards, a timeline that fills as you scroll, a tech marquee, education and languages. */
 :root {
-  --bg: #f7f8f8;
+  --bg: #f3f6f8;
+  --bg-2: #e8eef1;
   --surface: #ffffff;
-  --fg: #16201f;
-  --muted: #5b6866;
-  --line: #dde3e2;
-  --accent: #0d7a5f;
-  --accent-soft: #e3f2ed;
+  --fg: #101a24;
+  --muted: #566572;
+  --line: #d7e0e6;
+  --accent: #0a8f70;
+  --accent-2: #c86f00;
+  --accent-soft: rgba(10, 143, 112, 0.12);
+  --glow: rgba(10, 143, 112, 0.22);
+  --shadow: 0 1px 2px rgba(16, 26, 36, 0.05), 0 12px 32px -12px rgba(16, 26, 36, 0.18);
   --font-display: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --step--1: 0.8125rem;
-  --step-0: 1rem;
   --step-1: 1.25rem;
-  --step-2: 1.6rem;
-  --step-3: clamp(2.2rem, 6vw, 3.4rem);
+  --step-2: clamp(1.8rem, 4vw, 2.6rem);
+  --step-3: clamp(2.6rem, 7.5vw, 5rem);
+  --ease: cubic-bezier(.2, .7, .2, 1);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0f1514; --surface: #151d1c; --fg: #e4ecea; --muted: #94a3a0;
-    --line: #26322f; --accent: #4fd1a5; --accent-soft: #173029; color-scheme: dark;
+    --bg: #0a0f1a; --bg-2: #0f1626; --surface: #121b2d; --fg: #e8eef6; --muted: #8f9db0;
+    --line: #1f2b40; --accent: #3ddbb0; --accent-2: #ffb547;
+    --accent-soft: rgba(61, 219, 176, 0.12); --glow: rgba(61, 219, 176, 0.28);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 18px 40px -16px rgba(0,0,0,.6);
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0f1514; --surface: #151d1c; --fg: #e4ecea; --muted: #94a3a0;
-  --line: #26322f; --accent: #4fd1a5; --accent-soft: #173029; color-scheme: dark;
+  --bg: #0a0f1a; --bg-2: #0f1626; --surface: #121b2d; --fg: #e8eef6; --muted: #8f9db0;
+  --line: #1f2b40; --accent: #3ddbb0; --accent-2: #ffb547;
+  --accent-soft: rgba(61, 219, 176, 0.12); --glow: rgba(61, 219, 176, 0.28);
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 18px 40px -16px rgba(0,0,0,.6);
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-body);
-  font-size: var(--step-0);
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 1rem; line-height: 1.65;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
 }
 a { color: var(--accent); text-underline-offset: 3px; }
-a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+::selection { background: var(--accent); color: var(--bg); }
 
-/* language switch: content duplicated per language */
 html:not([data-lang="es"]) [lang="es"] { display: none !important; }
 html[data-lang="es"] [lang="en"] { display: none !important; }
 
 .wrap {
-  max-width: 46rem;
-  margin: 0 auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  width: 100%; max-width: 68rem; margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
 
+/* ---------- top bar ---------- */
 body::before {
-  content: ""; position: fixed; inset: 0 0 auto;
-  height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg);
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 30; background: var(--bg);
+}
+.progress {
+  position: fixed; top: env(safe-area-inset-top, 0px); left: 0; height: 2px; width: 100%;
+  z-index: 31; transform-origin: 0 50%; transform: scaleX(var(--scroll, 0));
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
 header.bar {
-  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line);
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: saturate(1.4) blur(12px); -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
 }
-header.bar .wrap {
-  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  padding-block: 0.75rem;
+header.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.7rem; }
+.mark { display: inline-flex; align-items: center; gap: 0.6rem; text-decoration: none; color: var(--fg); font-family: var(--font-mono); font-size: var(--step--1); white-space: nowrap; }
+.mark img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
+.mark b { font-weight: 500; }
+.mark span { color: var(--muted); }
+nav { display: flex; align-items: center; gap: 0.25rem; }
+nav a {
+  position: relative; color: var(--muted); text-decoration: none; font-size: 0.875rem;
+  padding: 0.4rem 0.75rem; border-radius: 999px; transition: color .25s, background-color .25s;
 }
-.mark { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); text-decoration: none; white-space: nowrap; }
-.mark b { color: var(--fg); font-weight: 500; }
-nav { display: flex; gap: 1.1rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
-nav a { color: var(--muted); text-decoration: none; font-size: var(--step--1); }
 nav a:hover { color: var(--fg); }
+nav a.active { color: var(--fg); background: var(--accent-soft); }
 .lang-btn {
-  font: 500 var(--step--1)/1 var(--font-mono);
-  color: var(--fg); background: transparent;
-  border: 1px solid var(--line); border-radius: 999px;
-  padding: 0.4rem 0.7rem; cursor: pointer;
+  margin-left: 0.5rem; font: 500 var(--step--1)/1 var(--font-mono); color: var(--fg);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+  padding: 0.45rem 0.75rem; cursor: pointer; transition: border-color .25s, transform .25s var(--ease);
 }
-.lang-btn:hover { border-color: var(--accent); }
-@media (max-width: 560px) { nav a { display: none; } }
+.lang-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+@media (max-width: 760px) { nav a { display: none; } }
 
-main { display: grid; gap: 4.5rem; padding-block: 4rem 5rem; }
-
-.hero { display: grid; gap: 1.25rem; }
-.status {
-  display: inline-flex; align-items: center; gap: 0.5rem; width: fit-content;
+/* ---------- hero ---------- */
+.hero { position: relative; isolation: isolate; overflow: hidden; border-bottom: 1px solid var(--line); }
+.hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(60% 70% at 78% 40%, var(--glow), transparent 70%),
+    linear-gradient(180deg, transparent 60%, var(--bg) 100%);
+}
+.hero .wrap {
+  display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: center; gap: 3rem; padding-block: clamp(4rem, 10vw, 7.5rem) clamp(3.5rem, 8vw, 6rem);
+}
+.hero-text { display: grid; gap: 1.4rem; min-width: 0; }
+.pill {
+  display: inline-flex; align-items: center; gap: 0.55rem; width: fit-content; max-width: 100%;
   font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted);
+  background: color-mix(in srgb, var(--surface) 80%, transparent); border: 1px solid var(--line);
+  border-radius: 999px; padding: 0.35rem 0.85rem 0.35rem 0.6rem;
 }
-.status::before {
-  content: ""; width: 8px; height: 8px; border-radius: 50%;
-  background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft);
-}
+.pill i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); position: relative; }
+.pill i::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--accent); animation: ping 2s var(--ease) infinite; }
+@keyframes ping { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(1.8); opacity: 0; } }
 h1 {
-  font-family: var(--font-display); font-size: var(--step-3); font-weight: 600;
-  line-height: 1.05; letter-spacing: -0.025em; margin: 0; text-wrap: balance;
+  font-family: var(--font-display); font-size: var(--step-3); font-weight: 700; line-height: 0.98;
+  letter-spacing: -0.035em; margin: 0; text-wrap: balance;
 }
-.role { font-family: var(--font-display); font-size: var(--step-1); font-weight: 500; color: var(--accent); margin: 0; }
-.lede { font-size: 1.125rem; color: var(--muted); max-width: 36rem; margin: 0; }
-.facts {
-  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 0.5rem 0 0; padding: 0; list-style: none;
-  font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted);
+h1 .grad {
+  background: linear-gradient(100deg, var(--fg) 20%, var(--accent) 60%, var(--accent-2) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  background-size: 200% 100%; animation: sheen 8s ease-in-out infinite alternate;
 }
-.facts strong { color: var(--fg); font-weight: 500; }
-.cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+@keyframes sheen { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+.role { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; margin: 0; }
+.typer { font-family: var(--font-mono); font-size: clamp(0.95rem, 2.2vw, 1.1rem); color: var(--muted); margin: 0; min-height: 1.7em; }
+.typer b { color: var(--accent); font-weight: 500; }
+.typer .caret { display: inline-block; width: 0.55em; height: 1.1em; vertical-align: -0.18em; background: var(--accent); margin-left: 2px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.lede { font-size: 1.1rem; color: var(--muted); max-width: 34rem; margin: 0; }
+.cta { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .btn {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.65rem 1.1rem; border-radius: 8px; text-decoration: none;
-  font-weight: 500; font-size: 0.9375rem; border: 1px solid var(--line); color: var(--fg);
+  display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.25rem; border-radius: 12px;
+  text-decoration: none; font-weight: 600; font-size: 0.95rem; color: var(--fg);
+  border: 1px solid var(--line); background: var(--surface);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s;
 }
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--accent); }
 .btn.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
-.btn:hover { border-color: var(--accent); }
 .btn.primary:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.btn svg { width: 16px; height: 16px; transition: transform .3s var(--ease); }
+.btn:hover svg { transform: translateY(2px); }
 
-section { display: grid; gap: 1.5rem; scroll-margin-top: 5rem; }
-h2 {
-  font-family: var(--font-mono); font-size: var(--step--1); font-weight: 500;
-  text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0;
-  display: flex; align-items: center; gap: 0.75rem;
+/* portrait with orbit */
+.portrait { position: relative; width: min(100%, 340px); aspect-ratio: 1; justify-self: center; max-width: 100%; }
+.portrait .ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--accent), var(--accent-2), transparent 55%, var(--accent));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+  animation: spin 14s linear infinite;
 }
-h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-p { margin: 0; }
-.about p { max-width: 38rem; }
-.about { display: grid; gap: 1rem; }
+.portrait .ring.r2 { inset: 13%; opacity: .45; animation-duration: 22s; animation-direction: reverse; }
+.portrait .photo {
+  position: absolute; inset: 24%; border-radius: 50%; overflow: hidden; background: var(--surface);
+  box-shadow: 0 0 0 6px var(--bg), 0 0 0 7px var(--line), 0 20px 60px -10px var(--glow);
+}
+.portrait .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.orbit { position: absolute; inset: 0; animation: spin 40s linear infinite; }
+.orbit span {
+  position: absolute; left: 50%; top: 50%; width: 0; height: 0;
+  transform: rotate(var(--a)) translateX(var(--rad, 165px)) rotate(calc(-1 * var(--a)));
+}
+.orbit em {
+  position: absolute; left: 0; top: 0; translate: -50% -50%; display: block;
+  font: 500 0.75rem/1 var(--font-mono); font-style: normal; color: var(--fg); white-space: nowrap;
+  background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow);
+  padding: 0.45rem 0.7rem; border-radius: 999px;
+  animation: spin 40s linear infinite reverse;
+}
+.orbit em.ai { color: var(--accent-2); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.orbit span:nth-child(1) { --a: -40deg; }
+.orbit span:nth-child(2) { --a: 32deg; }
+.orbit span:nth-child(3) { --a: 110deg; }
+.orbit span:nth-child(4) { --a: 185deg; }
+.orbit span:nth-child(5) { --a: 255deg; }
 
-/* experience: event log */
-.log { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.25rem; }
-.log > li {
-  position: relative; padding-left: 1.75rem; display: grid; gap: 0.5rem; min-width: 0;
+/* hero entrance (plays once on load, ends fully visible) */
+.enter { animation: rise .9s var(--ease) both; animation-delay: calc(var(--i, 0) * 90ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.portrait.enter { animation-name: pop; }
+@keyframes pop { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 860px) {
+  .hero .wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+  .portrait { width: min(100%, 280px); order: -1; }
+  .orbit span { --rad: 132px; }
 }
-.log > li::before {
-  content: ""; position: absolute; left: 0; top: 0.45rem;
-  width: 9px; height: 9px; border-radius: 50%;
-  border: 2px solid var(--accent); background: var(--bg);
+@media (max-width: 360px) { .orbit span { --rad: 112px; } }
+
+/* stats */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border-bottom: 1px solid var(--line); }
+.stat { background: var(--bg); padding: 1.6rem 1rem; display: grid; gap: 0.3rem; justify-items: center; text-align: center; }
+.stat strong { font-family: var(--font-display); font-size: var(--step-2); font-weight: 700; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat strong sup { font-size: 0.5em; color: var(--accent); vertical-align: 0.9em; margin-left: 2px; }
+.stat > span { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+@media (max-width: 640px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- sections ---------- */
+main section { scroll-margin-top: 3.5rem; padding-block: clamp(4rem, 9vw, 6.5rem); }
+main section:nth-of-type(even) { background: var(--bg-2); }
+.head { display: grid; gap: 0.75rem; margin-bottom: 2.75rem; max-width: 42rem; }
+.eyebrow { font-family: var(--font-mono); font-size: var(--step--1); color: var(--accent); letter-spacing: 0.08em; }
+h2 { font-family: var(--font-display); font-size: var(--step-2); font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; margin: 0; text-wrap: balance; }
+
+/* scroll-driven reveal; without support everything is simply visible */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% cover 25%; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(36px) scale(.98); } to { opacity: 1; transform: none; } }
+  }
 }
-.log > li::after {
-  content: ""; position: absolute; left: 5px; top: 1.3rem; bottom: -2.25rem;
-  width: 1px; background: var(--line);
+
+/* about */
+.about-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 3rem; align-items: start; }
+.about-text { display: grid; gap: 1rem; font-size: 1.05rem; }
+.about-text p { margin: 0; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.card {
+  position: relative; display: grid; gap: 0.6rem; align-content: start; padding: 1.4rem;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s;
 }
-.log > li:last-child::after { display: none; }
-.log > li.current::before { background: var(--accent); }
-.when { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); font-variant-numeric: tabular-nums; }
-.what { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; line-height: 1.3; margin: 0; }
-.what span.org { color: var(--muted); font-weight: 500; }
-.log ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; color: var(--fg); }
-.log ul li::marker { color: var(--accent); }
-.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.25rem; }
+.tilt { transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
+.card::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s;
+  background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 50%), var(--accent-soft), transparent 60%);
+}
+.card:hover { box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.card:hover::before { opacity: 1; }
+.card .ico { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.card .ico svg { width: 22px; height: 22px; }
+.card h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; margin: 0; line-height: 1.3; }
+.card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.card.hl .ico { background: color-mix(in srgb, var(--accent-2) 16%, transparent); color: var(--accent-2); }
+@media (max-width: 860px) { .about-grid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .cards { grid-template-columns: 1fr; } }
+
+/* timeline */
+.timeline { position: relative; list-style: none; margin: 0; padding: 0 0 0 2.25rem; display: grid; gap: 1.5rem; }
+.timeline::before, .timeline::after {
+  content: ""; position: absolute; left: 0.55rem; top: 0.5rem; bottom: 0.5rem; width: 2px; border-radius: 2px;
+}
+.timeline::before { background: var(--line); }
+.timeline::after {
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  transform-origin: top; transform: scaleY(var(--tl, 1));
+}
+.job { position: relative; min-width: 0; }
+.job::before {
+  content: ""; position: absolute; left: calc(-2.25rem + 0.05rem); top: 1.75rem; width: 14px; height: 14px;
+  border-radius: 50%; background: var(--bg); border: 3px solid var(--accent); z-index: 1;
+}
+.job.now::before { background: var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); }
+.job-card {
+  display: grid; gap: 0.75rem; padding: 1.5rem 1.6rem; border-radius: 18px;
+  background: var(--surface); border: 1px solid var(--line);
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s;
+}
+.job-card:hover { transform: translateX(6px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.job-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 1rem; }
+.job h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; margin: 0; line-height: 1.25; }
+.job h3 .org { color: var(--accent); }
+.when { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.now-badge { font: 500 0.68rem/1 var(--font-mono); letter-spacing: 0.06em; color: var(--bg); background: var(--accent); padding: 0.3rem 0.5rem; border-radius: 6px; margin-left: 0.6rem; vertical-align: 0.25em; }
+.job ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.4rem; }
+.job ul li::marker { color: var(--accent); }
+.job .place { margin: 0; color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .tag {
-  font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted);
-  border: 1px solid var(--line); border-radius: 4px; padding: 0.1rem 0.45rem;
+  font: 500 0.75rem/1.4 var(--font-mono); color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px; padding: 0.2rem 0.65rem; background: var(--bg);
+  transition: color .2s, border-color .2s;
 }
+.tag:hover { color: var(--accent); border-color: var(--accent); }
+.tag.ai { color: var(--accent-2); border-color: color-mix(in srgb, var(--accent-2) 40%, var(--line)); }
 
 /* stack */
-.stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1.75rem 2rem; }
-.stack > div { display: grid; gap: 0.6rem; align-content: start; }
-.stack h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin: 0; }
+.marquee { display: grid; gap: 0.9rem; margin-bottom: 3rem; overflow: hidden;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+          mask: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.track { display: flex; gap: 0.9rem; width: max-content; padding-right: 0.9rem; animation: slide 40s linear infinite; }
+.track.rev { animation-direction: reverse; animation-duration: 48s; }
+.marquee:hover .track { animation-play-state: paused; }
+@keyframes slide { to { transform: translateX(-50%); } }
+.chip {
+  display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.7rem 1.1rem; border-radius: 14px;
+  background: var(--surface); border: 1px solid var(--line); font-family: var(--font-display); font-weight: 600; white-space: nowrap;
+}
+.chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.chip.ai i { background: var(--accent-2); }
+.groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.group { display: grid; gap: 0.8rem; align-content: start; padding: 1.3rem; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.group h3 { margin: 0; font-family: var(--font-display); font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+.group h3::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--accent); }
+.group.ai h3::before { background: var(--accent-2); }
+@media (max-width: 860px) { .groups { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .groups { grid-template-columns: 1fr; } }
 
 /* education */
-.rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.rows li {
-  display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.25rem 1.25rem;
-  padding-block: 1rem; border-bottom: 1px solid var(--line);
-}
-.rows li > div { min-width: 0; display: grid; gap: 0.2rem; }
-.rows .title { font-weight: 600; }
-.rows .sub { color: var(--muted); font-size: 0.9375rem; }
-@media (max-width: 560px) { .rows li { grid-template-columns: 1fr; } }
+.edu { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; }
+.edu .card { gap: 0.4rem; }
+.edu .when { color: var(--accent); }
+.edu .card p.small { font-size: 0.9rem; }
 
-
-.langs { display: flex; flex-wrap: wrap; gap: 0.75rem 2.5rem; margin: 0; padding: 0; list-style: none; }
-.langs li { display: grid; }
-.langs strong { font-family: var(--font-display); font-weight: 600; }
-.langs span { color: var(--muted); font-size: 0.9375rem; }
-
+/* languages */
+.langs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.lang { display: grid; gap: 0.7rem; padding: 1.3rem; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.lang-top { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.lang strong { font-family: var(--font-display); font-size: 1.1rem; }
+.lang small { color: var(--muted); font-size: 0.85rem; }
+.meter { height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.meter i { display: block; height: 100%; width: var(--w); border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+@media (max-width: 640px) { .langs { grid-template-columns: 1fr; } }
 
 footer { border-top: 1px solid var(--line); }
-footer .wrap {
-  padding-block: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted);
-  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+footer .wrap { padding-block: 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+.top-link { color: var(--muted); text-decoration: none; }
+.top-link:hover { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 </style>
 </head>
 <body>
 
+<div class="progress" aria-hidden="true"></div>
+
 <header class="bar">
   <div class="wrap">
-    <a class="mark" href="#top"><b>jl.orta</b> ~ backend</a>
+    <a class="mark" href="#top"><img src="photo.png" alt=""><b>jl.orta</b><span>~ backend</span></a>
     <nav aria-label="Sections">
-      <a href="#about"><span lang="en">About</span><span lang="es">Sobre mí</span></a>
-      <a href="#experience"><span lang="en">Experience</span><span lang="es">Experiencia</span></a>
-      <a href="#stack">Stack</a>
+      <a href="#about" data-spy="about"><span lang="en">About</span><span lang="es">Sobre mí</span></a>
+      <a href="#experience" data-spy="experience"><span lang="en">Experience</span><span lang="es">Experiencia</span></a>
+      <a href="#stack" data-spy="stack">Stack</a>
+      <a href="#education" data-spy="education"><span lang="en">Education</span><span lang="es">Formación</span></a>
       <button class="lang-btn" id="lang-toggle" type="button" aria-label="Cambiar idioma / Switch language">ES</button>
     </nav>
   </div>
 </header>
 
-<main class="wrap" id="top">
-  <section class="hero" aria-label="Intro">
-    <span class="status"><span lang="en">Barcelona, Spain</span><span lang="es">Barcelona, España</span></span>
-    <h1>José Luis Orta Durán</h1>
-    <p class="role">Backend Engineering Lead</p>
-    <p class="lede">
-      <span lang="en">Backend engineer with 15+ years of experience designing and building scalable distributed systems, from real-time telemetry ingestion to high-throughput data platforms. Today AI is part of my everyday engineering workflow.</span>
-      <span lang="es">Ingeniero backend con más de 15 años de experiencia diseñando y construyendo sistemas distribuidos escalables, desde ingesta de telemetría en tiempo real hasta plataformas de datos de alto rendimiento. Hoy la IA forma parte de mi flujo de desarrollo diario.</span>
-    </p>
-    <ul class="facts">
-      <li><strong>15+</strong> <span lang="en">years</span><span lang="es">años</span></li>
-      <li><strong>Go · PHP</strong></li>
-      <li><strong>DDD · CQRS · Event-driven</strong></li>
-      <li><strong><span lang="en">AI-assisted development</span><span lang="es">Desarrollo asistido por IA</span></strong></li>
-    </ul>
-    <div class="cta">
-      <a class="btn primary" href="#experience"><span lang="en">See experience</span><span lang="es">Ver experiencia</span></a>
+<div class="hero" id="top">
+  <canvas id="mesh" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero-text">
+      <span class="pill enter" style="--i:0"><i></i><span lang="en">Barcelona · Senior Backend at iLovePDF</span><span lang="es">Barcelona · Senior Backend en iLovePDF</span></span>
+      <h1 class="enter" style="--i:1">José Luis <span class="grad">Orta Durán</span></h1>
+      <p class="role enter" style="--i:2">Backend Engineering Lead</p>
+      <p class="typer enter" style="--i:3">
+        <span lang="en">&gt; I build <b class="typed" data-words="distributed systems|event-driven services|real-time data pipelines|software with AI">distributed systems</b></span><span lang="es">&gt; Construyo <b class="typed" data-words="sistemas distribuidos|servicios orientados a eventos|pipelines de datos en tiempo real|software con IA">sistemas distribuidos</b></span><span class="caret" aria-hidden="true"></span>
+      </p>
+      <p class="lede enter" style="--i:4">
+        <span lang="en">15+ years designing and building scalable backends, from real-time telemetry ingestion to high-throughput data platforms. Today AI is part of my everyday engineering workflow.</span>
+        <span lang="es">Más de 15 años diseñando y construyendo backends escalables, desde ingesta de telemetría en tiempo real hasta plataformas de datos de alto rendimiento. Hoy la IA forma parte de mi flujo de desarrollo diario.</span>
+      </p>
+      <div class="cta enter" style="--i:5">
+        <a class="btn primary" href="#experience"><span lang="en">See experience</span><span lang="es">Ver experiencia</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v12M3 9l5 5 5-5"/></svg></a>
+        <a class="btn" href="#stack"><span lang="en">Tech stack</span><span lang="es">Stack técnico</span></a>
+      </div>
+    </div>
+    <div class="portrait enter" style="--i:2">
+      <div class="ring"></div>
+      <div class="ring r2"></div>
+      <div class="photo"><img src="photo.png" alt="José Luis Orta Durán" width="100" height="100"></div>
+      <div class="orbit" aria-hidden="true">
+        <span><em>Go</em></span>
+        <span><em>PHP</em></span>
+        <span><em>Kubernetes</em></span>
+        <span><em>AWS</em></span>
+        <span><em class="ai">AI agents</em></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><strong data-count="15">15<sup>+</sup></strong><span><span lang="en">years in backend</span><span lang="es">años en backend</span></span></div>
+  <div class="stat"><strong data-count="4">4</strong><span><span lang="en">companies</span><span lang="es">empresas</span></span></div>
+  <div class="stat"><strong data-count="6">6</strong><span><span lang="en">years leading teams</span><span lang="es">años liderando equipos</span></span></div>
+  <div class="stat"><strong data-count="3">3</strong><span><span lang="en">languages spoken</span><span lang="es">idiomas</span></span></div>
+</div>
+
+<main>
+  <section id="about">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow"><span lang="en">About</span><span lang="es">Sobre mí</span></span>
+        <h2><span lang="en">Backends that scale, teams that ship</span><span lang="es">Backends que escalan, equipos que entregan</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p lang="en">I am currently a Senior Backend Developer at iLovePDF, where AI tools and agents are part of how I design, write, test and review code. Before that, as Backend Engineering Lead at Wallbox, I led work on Go platforms that ingest large volumes of real-time charger telemetry and power energy-efficiency features, while owning planning, roadmaps and delivery.</p>
+          <p lang="es">Actualmente soy Senior Backend Developer en iLovePDF, donde las herramientas y agentes de IA forman parte de cómo diseño, escribo, pruebo y reviso código. Antes, como Backend Engineering Lead en Wallbox, lideré plataformas en Go que ingieren grandes volúmenes de telemetría en tiempo real de los cargadores y dan soporte a funcionalidades de eficiencia energética, siendo responsable de la planificación, el roadmap y la entrega.</p>
+          <p lang="en">Before that I spent nine years at Emailing Network, growing from developer to team leader: microservices on Kubernetes, data pipelines with Airflow and Spark, and a core platform for user targeting and campaign delivery. I care about clear architecture, shared standards and systems that are easy to observe and operate.</p>
+          <p lang="es">Antes pasé nueve años en Emailing Network, de desarrollador a team leader: microservicios en Kubernetes, pipelines de datos con Airflow y Spark, y una plataforma core de segmentación de usuarios y envío de campañas. Me importan una arquitectura clara, los estándares compartidos y los sistemas fáciles de observar y operar.</p>
+        </div>
+        <div class="cards">
+          <article class="card tilt reveal">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="5" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M7.3 10.9 16.7 6.1M7.3 13.1l9.4 4.8"/></svg></span>
+            <h3><span lang="en">Distributed systems</span><span lang="es">Sistemas distribuidos</span></h3>
+            <p lang="en">Microservices, DDD, CQRS and event-driven design for high availability.</p>
+            <p lang="es">Microservicios, DDD, CQRS y diseño orientado a eventos para alta disponibilidad.</p>
+          </article>
+          <article class="card tilt reveal">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
+            <h3><span lang="en">Data platforms</span><span lang="es">Plataformas de datos</span></h3>
+            <p lang="en">Real-time telemetry, Airflow, Spark on EMR, S3 data lake and Redshift.</p>
+            <p lang="es">Telemetría en tiempo real, Airflow, Spark sobre EMR, data lake en S3 y Redshift.</p>
+          </article>
+          <article class="card tilt reveal">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14.8c1.6.8 2.7 2.6 3 5.2"/></svg></span>
+            <h3><span lang="en">Technical leadership</span><span lang="es">Liderazgo técnico</span></h3>
+            <p lang="en">Roadmaps, planning and shared architecture standards across teams.</p>
+            <p lang="es">Roadmaps, planificación y estándares de arquitectura compartidos entre equipos.</p>
+          </article>
+          <article class="card tilt hl reveal">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span>
+            <h3><span lang="en">AI-assisted development</span><span lang="es">Desarrollo con IA</span></h3>
+            <p lang="en">Coding agents for implementation, tests and review, always with human review.</p>
+            <p lang="es">Agentes de código para implementar, testear y revisar, siempre con revisión humana.</p>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section id="about" class="about">
-    <h2><span lang="en">About</span><span lang="es">Sobre mí</span></h2>
-    <p lang="en">I am currently a Senior Backend Developer at iLovePDF, where AI tools and agents are part of how I design, write, test and review code. Before that, as Backend Engineering Lead at Wallbox, I led work on Go platforms that ingest large volumes of real-time charger telemetry and power energy-efficiency features, while owning planning, roadmaps and delivery.</p>
-    <p lang="es">Actualmente soy Senior Backend Developer en iLovePDF, donde las herramientas y agentes de IA forman parte de cómo diseño, escribo, pruebo y reviso código. Antes, como Backend Engineering Lead en Wallbox, lideré plataformas en Go que ingieren grandes volúmenes de telemetría en tiempo real de los cargadores y dan soporte a funcionalidades de eficiencia energética, siendo responsable de la planificación, el roadmap y la entrega.</p>
-    <p lang="en">Before that I spent nine years at Emailing Network, growing from developer to team leader: microservices on Kubernetes, data pipelines with Airflow and Spark, and a core platform for user targeting and campaign delivery. I care about clear architecture, shared standards and systems that are easy to observe and operate.</p>
-    <p lang="es">Antes pasé nueve años en Emailing Network, de desarrollador a team leader: microservicios en Kubernetes, pipelines de datos con Airflow y Spark, y una plataforma core de segmentación de usuarios y envío de campañas. Me importan una arquitectura clara, los estándares compartidos y los sistemas fáciles de observar y operar.</p>
-  </section>
-
   <section id="experience">
-    <h2><span lang="en">Experience</span><span lang="es">Experiencia</span></h2>
-    <ol class="log">
-      <li class="current">
-        <span class="when">2025 → <span lang="en">present</span><span lang="es">actualidad</span></span>
-        <h3 class="what">Senior Backend Developer <span class="org">· iLovePDF</span></h3>
-        <ul lang="en">
-          <li>Backend development for iLovePDF's document-processing products, used by millions of people to work with PDF files.</li>
-          <li>AI-assisted development as part of the daily workflow: coding agents and assistants for implementation, refactoring, test generation and code review.</li>
-          <li>Context and prompt engineering to get reliable results from AI tools on a production codebase, always with human review of the output.</li>
-        </ul>
-        <ul lang="es">
-          <li>Desarrollo backend de los productos de procesamiento de documentos de iLovePDF, usados por millones de personas para trabajar con PDF.</li>
-          <li>Desarrollo asistido por IA en el día a día: agentes y asistentes de código para implementación, refactorización, generación de tests y revisión de código.</li>
-          <li>Ingeniería de contexto y de prompts para obtener resultados fiables de las herramientas de IA en un código en producción, siempre con revisión humana.</li>
-        </ul>
-        <div class="tags"><span class="tag">Backend</span><span class="tag">AI coding agents</span><span class="tag">LLM tooling</span><span class="tag">Code review</span></div>
-      </li>
-      <li>
-        <span class="when">2022-04 → 2025-05</span>
-        <h3 class="what">Backend Engineering Lead <span class="org">· Wallbox Chargers</span></h3>
-        <ul lang="en">
-          <li>Go services for large-scale telemetry ingestion and energy-efficiency platforms processing high volumes of real-time data.</li>
-          <li>Owned delivery, planning and execution, with predictable outcomes through clear goals, roadmaps and prioritization.</li>
-          <li>Worked with DevOps teams to improve system reliability and observability.</li>
-          <li>Built scalable, high-availability backend services using DDD, CQRS and event-driven architecture.</li>
-        </ul>
-        <ul lang="es">
-          <li>Servicios en Go para ingesta de telemetría a gran escala y plataformas de eficiencia energética con grandes volúmenes de datos en tiempo real.</li>
-          <li>Responsable de la entrega, planificación y ejecución, con resultados predecibles gracias a objetivos claros, roadmaps y priorización.</li>
-          <li>Colaboración con los equipos de DevOps para mejorar la fiabilidad y la observabilidad de los sistemas.</li>
-          <li>Servicios backend escalables y de alta disponibilidad con DDD, CQRS y arquitectura orientada a eventos.</li>
-        </ul>
-        <div class="tags"><span class="tag">Go</span><span class="tag">DDD</span><span class="tag">CQRS</span><span class="tag">Event-driven</span><span class="tag">Observability</span></div>
-      </li>
-      <li>
-        <span class="when">2019-06 → 2022-04</span>
-        <h3 class="what">Senior Software Engineer / Team Leader <span class="org">· Emailing Network</span></h3>
-        <ul lang="en">
-          <li>Translated business requirements into scalable technical solutions together with stakeholders.</li>
-          <li>Led the design and implementation of a core platform for user targeting and campaign delivery, handling large-scale data processing and high-throughput workloads.</li>
-          <li>Defined and promoted shared architectural standards adopted across multiple teams.</li>
-        </ul>
-        <ul lang="es">
-          <li>Traducción de requisitos de negocio en soluciones técnicas escalables junto a stakeholders.</li>
-          <li>Lideré el diseño e implementación de una plataforma core de segmentación de usuarios y envío de campañas, con procesamiento de datos a gran escala y cargas de alto rendimiento.</li>
-          <li>Definí y promoví estándares de arquitectura compartidos, adoptados por varios equipos.</li>
-        </ul>
-        <div class="tags"><span class="tag">Leadership</span><span class="tag">Architecture</span><span class="tag">High throughput</span></div>
-      </li>
-      <li>
-        <span class="when">2013-06 → 2019</span>
-        <h3 class="what">Senior Software Development Engineer <span class="org">· Emailing Network</span></h3>
-        <ul lang="en">
-          <li>Designed and implemented a microservices architecture on Kubernetes for scalable, fault-tolerant distributed systems.</li>
-          <li>Built and optimized large-scale data pipelines with Airflow, Spark on EMR, ETLs, an S3 data lake and Redshift.</li>
-          <li>Implemented and maintained CI/CD pipelines to automate testing, deployments and releases.</li>
-          <li>Built backend services in PHP on AWS following DDD and microservices principles.</li>
-        </ul>
-        <ul lang="es">
-          <li>Diseño e implementación de una arquitectura de microservicios en Kubernetes para sistemas distribuidos escalables y tolerantes a fallos.</li>
-          <li>Pipelines de datos a gran escala con Airflow, Spark sobre EMR, ETLs, data lake en S3 y Redshift.</li>
-          <li>Pipelines de CI/CD para automatizar tests, despliegues y releases.</li>
-          <li>Servicios backend en PHP sobre AWS siguiendo DDD y principios de microservicios.</li>
-        </ul>
-        <div class="tags"><span class="tag">PHP</span><span class="tag">Kubernetes</span><span class="tag">AWS</span><span class="tag">Airflow</span><span class="tag">Spark</span><span class="tag">Redshift</span></div>
-      </li>
-      <li>
-        <span class="when">2009-09 → 2013-09</span>
-        <h3 class="what">Software Developer <span class="org">· Auxmen</span></h3>
-        <p class="sub" style="color:var(--muted)">Sant Andreu de la Barca</p>
-      </li>
-    </ol>
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow"><span lang="en">Experience</span><span lang="es">Experiencia</span></span>
+        <h2><span lang="en">Where I have built things</span><span lang="es">Dónde he construido cosas</span></h2>
+      </div>
+      <ol class="timeline" id="timeline">
+        <li class="job now reveal">
+          <div class="job-card">
+            <div class="job-top">
+              <h3>Senior Backend Developer <span class="org">· iLovePDF</span><span class="now-badge"><span lang="en">NOW</span><span lang="es">ACTUAL</span></span></h3>
+              <span class="when">2025 → <span lang="en">present</span><span lang="es">actualidad</span></span>
+            </div>
+            <ul lang="en">
+              <li>Backend development for iLovePDF's document-processing products, used by millions of people to work with PDF files.</li>
+              <li>AI-assisted development as part of the daily workflow: coding agents and assistants for implementation, refactoring, test generation and code review.</li>
+              <li>Context and prompt engineering to get reliable results from AI tools on a production codebase, always with human review of the output.</li>
+            </ul>
+            <ul lang="es">
+              <li>Desarrollo backend de los productos de procesamiento de documentos de iLovePDF, usados por millones de personas para trabajar con PDF.</li>
+              <li>Desarrollo asistido por IA en el día a día: agentes y asistentes de código para implementación, refactorización, generación de tests y revisión de código.</li>
+              <li>Ingeniería de contexto y de prompts para obtener resultados fiables de las herramientas de IA en un código en producción, siempre con revisión humana.</li>
+            </ul>
+            <div class="tags"><span class="tag">Backend</span><span class="tag ai">AI coding agents</span><span class="tag ai">LLM tooling</span><span class="tag">Code review</span></div>
+          </div>
+        </li>
+        <li class="job reveal">
+          <div class="job-card">
+            <div class="job-top">
+              <h3>Backend Engineering Lead <span class="org">· Wallbox Chargers</span></h3>
+              <span class="when">2022-04 → 2025-05</span>
+            </div>
+            <ul lang="en">
+              <li>Go services for large-scale telemetry ingestion and energy-efficiency platforms processing high volumes of real-time data.</li>
+              <li>Owned delivery, planning and execution, with predictable outcomes through clear goals, roadmaps and prioritization.</li>
+              <li>Worked with DevOps teams to improve system reliability and observability.</li>
+              <li>Built scalable, high-availability backend services using DDD, CQRS and event-driven architecture.</li>
+            </ul>
+            <ul lang="es">
+              <li>Servicios en Go para ingesta de telemetría a gran escala y plataformas de eficiencia energética con grandes volúmenes de datos en tiempo real.</li>
+              <li>Responsable de la entrega, planificación y ejecución, con resultados predecibles gracias a objetivos claros, roadmaps y priorización.</li>
+              <li>Colaboración con los equipos de DevOps para mejorar la fiabilidad y la observabilidad de los sistemas.</li>
+              <li>Servicios backend escalables y de alta disponibilidad con DDD, CQRS y arquitectura orientada a eventos.</li>
+            </ul>
+            <div class="tags"><span class="tag">Go</span><span class="tag">DDD</span><span class="tag">CQRS</span><span class="tag">Event-driven</span><span class="tag">Observability</span></div>
+          </div>
+        </li>
+        <li class="job reveal">
+          <div class="job-card">
+            <div class="job-top">
+              <h3>Senior Software Engineer / Team Leader <span class="org">· Emailing Network</span></h3>
+              <span class="when">2019-06 → 2022-04</span>
+            </div>
+            <ul lang="en">
+              <li>Translated business requirements into scalable technical solutions together with stakeholders.</li>
+              <li>Led the design and implementation of a core platform for user targeting and campaign delivery, handling large-scale data processing and high-throughput workloads.</li>
+              <li>Defined and promoted shared architectural standards adopted across multiple teams.</li>
+            </ul>
+            <ul lang="es">
+              <li>Traducción de requisitos de negocio en soluciones técnicas escalables junto a stakeholders.</li>
+              <li>Lideré el diseño e implementación de una plataforma core de segmentación de usuarios y envío de campañas, con procesamiento de datos a gran escala y cargas de alto rendimiento.</li>
+              <li>Definí y promoví estándares de arquitectura compartidos, adoptados por varios equipos.</li>
+            </ul>
+            <div class="tags"><span class="tag">Leadership</span><span class="tag">Architecture</span><span class="tag">High throughput</span></div>
+          </div>
+        </li>
+        <li class="job reveal">
+          <div class="job-card">
+            <div class="job-top">
+              <h3>Senior Software Development Engineer <span class="org">· Emailing Network</span></h3>
+              <span class="when">2013-06 → 2019</span>
+            </div>
+            <ul lang="en">
+              <li>Designed and implemented a microservices architecture on Kubernetes for scalable, fault-tolerant distributed systems.</li>
+              <li>Built and optimized large-scale data pipelines with Airflow, Spark on EMR, ETLs, an S3 data lake and Redshift.</li>
+              <li>Implemented and maintained CI/CD pipelines to automate testing, deployments and releases.</li>
+              <li>Built backend services in PHP on AWS following DDD and microservices principles.</li>
+            </ul>
+            <ul lang="es">
+              <li>Diseño e implementación de una arquitectura de microservicios en Kubernetes para sistemas distribuidos escalables y tolerantes a fallos.</li>
+              <li>Pipelines de datos a gran escala con Airflow, Spark sobre EMR, ETLs, data lake en S3 y Redshift.</li>
+              <li>Pipelines de CI/CD para automatizar tests, despliegues y releases.</li>
+              <li>Servicios backend en PHP sobre AWS siguiendo DDD y principios de microservicios.</li>
+            </ul>
+            <div class="tags"><span class="tag">PHP</span><span class="tag">Kubernetes</span><span class="tag">AWS</span><span class="tag">Airflow</span><span class="tag">Spark</span><span class="tag">Redshift</span></div>
+          </div>
+        </li>
+        <li class="job reveal">
+          <div class="job-card">
+            <div class="job-top">
+              <h3>Software Developer <span class="org">· Auxmen</span></h3>
+              <span class="when">2009-09 → 2013-09</span>
+            </div>
+            <p class="place">Sant Andreu de la Barca</p>
+          </div>
+        </li>
+      </ol>
+    </div>
   </section>
 
   <section id="stack">
-    <h2>Stack</h2>
-    <div class="stack">
-      <div>
-        <h3><span lang="en">Languages</span><span lang="es">Lenguajes</span></h3>
-        <div class="tags"><span class="tag">Go</span><span class="tag">PHP</span><span class="tag">JavaScript</span><span class="tag">SQL</span></div>
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow">Stack</span>
+        <h2><span lang="en">Tools I reach for</span><span lang="es">Las herramientas que uso</span></h2>
       </div>
-      <div>
-        <h3><span lang="en">Architecture</span><span lang="es">Arquitectura</span></h3>
-        <div class="tags"><span class="tag">DDD</span><span class="tag">CQRS</span><span class="tag">Event-driven</span><span class="tag">Microservices</span></div>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="track">
+        <span class="chip"><i></i>Go</span><span class="chip"><i></i>PHP</span><span class="chip"><i></i>Kubernetes</span><span class="chip"><i></i>AWS</span><span class="chip"><i></i>Docker</span><span class="chip ai"><i></i>AI coding agents</span><span class="chip"><i></i>DDD</span><span class="chip"><i></i>CQRS</span><span class="chip"><i></i>Event-driven</span><span class="chip"><i></i>Microservices</span>
+        <span class="chip"><i></i>Go</span><span class="chip"><i></i>PHP</span><span class="chip"><i></i>Kubernetes</span><span class="chip"><i></i>AWS</span><span class="chip"><i></i>Docker</span><span class="chip ai"><i></i>AI coding agents</span><span class="chip"><i></i>DDD</span><span class="chip"><i></i>CQRS</span><span class="chip"><i></i>Event-driven</span><span class="chip"><i></i>Microservices</span>
       </div>
-      <div>
-        <h3><span lang="en">Infrastructure</span><span lang="es">Infraestructura</span></h3>
-        <div class="tags"><span class="tag">AWS</span><span class="tag">Kubernetes</span><span class="tag">Docker</span><span class="tag">CI/CD</span></div>
+      <div class="track rev">
+        <span class="chip"><i></i>Airflow</span><span class="chip"><i></i>Spark / EMR</span><span class="chip"><i></i>Redshift</span><span class="chip"><i></i>S3 data lake</span><span class="chip ai"><i></i>LLM assistants</span><span class="chip"><i></i>CI/CD</span><span class="chip"><i></i>TDD</span><span class="chip"><i></i>Observability</span><span class="chip"><i></i>JavaScript</span><span class="chip ai"><i></i>Context engineering</span>
+        <span class="chip"><i></i>Airflow</span><span class="chip"><i></i>Spark / EMR</span><span class="chip"><i></i>Redshift</span><span class="chip"><i></i>S3 data lake</span><span class="chip ai"><i></i>LLM assistants</span><span class="chip"><i></i>CI/CD</span><span class="chip"><i></i>TDD</span><span class="chip"><i></i>Observability</span><span class="chip"><i></i>JavaScript</span><span class="chip ai"><i></i>Context engineering</span>
       </div>
-      <div>
-        <h3><span lang="en">Data</span><span lang="es">Datos</span></h3>
-        <div class="tags"><span class="tag">Airflow</span><span class="tag">Spark / EMR</span><span class="tag">S3 data lake</span><span class="tag">Redshift</span><span class="tag">ETL</span></div>
-      </div>
-      <div>
-        <h3><span lang="en">Practices</span><span lang="es">Prácticas</span></h3>
-        <div class="tags"><span class="tag">TDD</span><span class="tag">PHPUnit</span><span class="tag">Codeception</span><span class="tag">Observability</span><span class="tag">Roadmaps</span><span class="tag">Tech standards</span></div>
-      </div>
-      <div>
-        <h3><span lang="en">AI in development</span><span lang="es">IA en el desarrollo</span></h3>
-        <div class="tags"><span class="tag">AI coding agents</span><span class="tag">LLM assistants</span><span class="tag">Context engineering</span><span class="tag">AI code review</span></div>
+    </div>
+    <div class="wrap">
+      <div class="groups">
+        <div class="group reveal"><h3><span lang="en">Languages</span><span lang="es">Lenguajes</span></h3>
+          <div class="tags"><span class="tag">Go</span><span class="tag">PHP</span><span class="tag">JavaScript</span><span class="tag">SQL</span></div></div>
+        <div class="group reveal"><h3><span lang="en">Architecture</span><span lang="es">Arquitectura</span></h3>
+          <div class="tags"><span class="tag">DDD</span><span class="tag">CQRS</span><span class="tag">Event-driven</span><span class="tag">Microservices</span></div></div>
+        <div class="group reveal"><h3><span lang="en">Infrastructure</span><span lang="es">Infraestructura</span></h3>
+          <div class="tags"><span class="tag">AWS</span><span class="tag">Kubernetes</span><span class="tag">Docker</span><span class="tag">CI/CD</span></div></div>
+        <div class="group reveal"><h3><span lang="en">Data</span><span lang="es">Datos</span></h3>
+          <div class="tags"><span class="tag">Airflow</span><span class="tag">Spark / EMR</span><span class="tag">S3 data lake</span><span class="tag">Redshift</span><span class="tag">ETL</span></div></div>
+        <div class="group reveal"><h3><span lang="en">Practices</span><span lang="es">Prácticas</span></h3>
+          <div class="tags"><span class="tag">TDD</span><span class="tag">PHPUnit</span><span class="tag">Codeception</span><span class="tag">Observability</span><span class="tag">Roadmaps</span><span class="tag">Tech standards</span></div></div>
+        <div class="group ai reveal"><h3><span lang="en">AI in development</span><span lang="es">IA en el desarrollo</span></h3>
+          <div class="tags"><span class="tag ai">AI coding agents</span><span class="tag ai">LLM assistants</span><span class="tag ai">Context engineering</span><span class="tag ai">AI code review</span></div></div>
       </div>
     </div>
   </section>
 
   <section id="education">
-    <h2><span lang="en">Education</span><span lang="es">Formación</span></h2>
-    <ul class="rows">
-      <li><span class="when">2017 – 2018</span><div>
-        <span class="title"><span lang="en">Postgraduate, Business Intelligence &amp; Big Data</span><span lang="es">Posgrado en Business Intelligence y Big Data</span></span>
-        <span class="sub">Universitat Oberta de Catalunya</span>
-        <span class="sub"><span lang="en">Final project: a data warehouse built on Barcelona Open Data to analyse public transport.</span><span lang="es">Proyecto final: data warehouse con el Open Data de Barcelona para analizar el transporte público.</span></span>
-      </div></li>
-      <li><span class="when">2010 – 2014</span><div>
-        <span class="title"><span lang="en">Degree in Software Engineering</span><span lang="es">Grado en Ingeniería del Software</span></span>
-        <span class="sub">UPC · Facultat d'Informàtica de Barcelona</span>
-      </div></li>
-      <li><span class="when">2012 – 2013</span><div>
-        <span class="title"><span lang="en">Internship, High Performance JavaScript</span><span lang="es">Prácticas, JavaScript de alto rendimiento</span></span>
-        <span class="sub">Softonic, Barcelona · TDD, HTML5, Responsive Design</span>
-      </div></li>
-      <li><span class="when">2008 – 2010</span><div>
-        <span class="title"><span lang="en">Higher VET, Software Application Development</span><span lang="es">CFGS Desarrollo de Aplicaciones Informáticas</span></span>
-        <span class="sub">IES La Mercè, Barcelona</span>
-      </div></li>
-      <li><span class="when">2008 – 2010</span><div>
-        <span class="title"><span lang="en">VET, Computer Systems Operation</span><span lang="es">CFGM Explotación de Sistemas Informáticos</span></span>
-        <span class="sub">IES Gabriela Mistral, Sant Vicenç dels Horts</span>
-      </div></li>
-    </ul>
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow"><span lang="en">Education</span><span lang="es">Formación</span></span>
+        <h2><span lang="en">Always learning</span><span lang="es">Siempre aprendiendo</span></h2>
+      </div>
+      <div class="edu">
+        <article class="card tilt reveal">
+          <span class="when">2017 – 2018</span>
+          <h3><span lang="en">Postgraduate, Business Intelligence &amp; Big Data</span><span lang="es">Posgrado en Business Intelligence y Big Data</span></h3>
+          <p>Universitat Oberta de Catalunya</p>
+          <p class="small"><span lang="en">Final project: a data warehouse on Barcelona Open Data to analyse public transport.</span><span lang="es">Proyecto final: data warehouse con el Open Data de Barcelona para analizar el transporte público.</span></p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="when">2010 – 2014</span>
+          <h3><span lang="en">Degree in Software Engineering</span><span lang="es">Grado en Ingeniería del Software</span></h3>
+          <p>UPC · Facultat d'Informàtica de Barcelona</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="when">2012 – 2013</span>
+          <h3><span lang="en">Internship, High Performance JavaScript</span><span lang="es">Prácticas, JavaScript de alto rendimiento</span></h3>
+          <p>Softonic, Barcelona · TDD, HTML5, Responsive Design</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="when">2008 – 2010</span>
+          <h3><span lang="en">Higher VET, Software Application Development</span><span lang="es">CFGS Desarrollo de Aplicaciones Informáticas</span></h3>
+          <p>IES La Mercè, Barcelona</p>
+        </article>
+        <article class="card tilt reveal">
+          <span class="when">2008 – 2010</span>
+          <h3><span lang="en">VET, Computer Systems Operation</span><span lang="es">CFGM Explotación de Sistemas Informáticos</span></h3>
+          <p>IES Gabriela Mistral, Sant Vicenç dels Horts</p>
+        </article>
+      </div>
+    </div>
   </section>
 
   <section id="languages">
-    <h2><span lang="en">Languages</span><span lang="es">Idiomas</span></h2>
-    <ul class="langs">
-      <li><strong><span lang="en">Spanish</span><span lang="es">Español</span></strong><span><span lang="en">Native</span><span lang="es">Nativo</span></span></li>
-      <li><strong><span lang="en">Catalan</span><span lang="es">Catalán</span></strong><span><span lang="en">Native</span><span lang="es">Nativo</span></span></li>
-      <li><strong><span lang="en">English</span><span lang="es">Inglés</span></strong><span><span lang="en">Professional working proficiency</span><span lang="es">Nivel profesional</span></span></li>
-    </ul>
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow"><span lang="en">Languages</span><span lang="es">Idiomas</span></span>
+        <h2><span lang="en">How we can talk</span><span lang="es">En qué idioma hablamos</span></h2>
+      </div>
+      <div class="langs">
+        <div class="lang reveal"><div class="lang-top"><strong><span lang="en">Spanish</span><span lang="es">Español</span></strong><small><span lang="en">Native</span><span lang="es">Nativo</span></small></div><div class="meter"><i style="--w:100%"></i></div></div>
+        <div class="lang reveal"><div class="lang-top"><strong><span lang="en">Catalan</span><span lang="es">Catalán</span></strong><small><span lang="en">Native</span><span lang="es">Nativo</span></small></div><div class="meter"><i style="--w:100%"></i></div></div>
+        <div class="lang reveal"><div class="lang-top"><strong><span lang="en">English</span><span lang="es">Inglés</span></strong><small><span lang="en">Professional</span><span lang="es">Profesional</span></small></div><div class="meter"><i style="--w:75%"></i></div></div>
+      </div>
+    </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <span>© 2026 José Luis Orta Durán</span>
-    <span>Barcelona</span>
+    <span>© 2026 José Luis Orta Durán · Barcelona</span>
+    <a class="top-link" href="#top"><span lang="en">Back to top ↑</span><span lang="es">Volver arriba ↑</span></a>
   </div>
 </footer>
 
 <script>
 (function () {
   var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- language + typewriter ---- */
   var btn = document.getElementById('lang-toggle');
-  function apply(lang) {
+  var typerTimer = null;
+  function restartTyper() {
+    clearTimeout(typerTimer);
+    document.querySelectorAll('.typed').forEach(function (el) { el.textContent = el.getAttribute('data-words').split('|')[0]; });
+    if (reduce) return;
+    var el = document.querySelector('[lang="' + root.getAttribute('data-lang') + '"] > .typed');
+    if (!el) return;
+    var words = el.getAttribute('data-words').split('|');
+    var w = 0, i = words[0].length, deleting = true;
+    function tick() {
+      if (deleting) {
+        i--; el.textContent = words[w].slice(0, i);
+        if (i <= 0) { deleting = false; w = (w + 1) % words.length; }
+        typerTimer = setTimeout(tick, 32);
+      } else {
+        i++; el.textContent = words[w].slice(0, i);
+        if (i >= words[w].length) { deleting = true; typerTimer = setTimeout(tick, 2200); }
+        else typerTimer = setTimeout(tick, 60);
+      }
+    }
+    typerTimer = setTimeout(tick, 2600);
+  }
+  function applyLang(lang) {
     root.setAttribute('data-lang', lang);
     root.setAttribute('lang', lang);
     btn.textContent = lang === 'en' ? 'ES' : 'EN';
+    restartTyper();
   }
   var saved = null;
   try { saved = localStorage.getItem('lang'); } catch (e) {}
   if (saved !== 'en' && saved !== 'es') {
     saved = (navigator.language || 'en').toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
   }
-  apply(saved);
   btn.addEventListener('click', function () {
     var next = root.getAttribute('data-lang') === 'en' ? 'es' : 'en';
-    apply(next);
+    applyLang(next);
     try { localStorage.setItem('lang', next); } catch (e) {}
   });
+  applyLang(saved);
+
+  /* ---- scroll progress, timeline fill, active nav ---- */
+  var tl = document.getElementById('timeline');
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a[data-spy]'));
+  var sections = links.map(function (a) { return document.getElementById(a.getAttribute('data-spy')); });
+  var ticking = false;
+  function onScroll() {
+    ticking = false;
+    var h = document.documentElement.scrollHeight - innerHeight;
+    root.style.setProperty('--scroll', h > 0 ? (scrollY / h).toFixed(4) : 0);
+    if (!reduce && tl) {
+      var r = tl.getBoundingClientRect();
+      var p = (innerHeight * 0.75 - r.top) / r.height;
+      tl.style.setProperty('--tl', Math.max(0, Math.min(1, p)).toFixed(4));
+    }
+    var current = -1;
+    sections.forEach(function (s, idx) { if (s && s.getBoundingClientRect().top < innerHeight * 0.4) current = idx; });
+    links.forEach(function (a, idx) { a.classList.toggle('active', idx === current); });
+  }
+  addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ---- count-up stats (final values are in the HTML) ---- */
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        var el = en.target, end = +el.getAttribute('data-count'), t0 = performance.now(), dur = 1400;
+        (function step(t) {
+          var k = Math.min(1, Math.max(0, (t - t0) / dur)), e = 1 - Math.pow(1 - k, 3);
+          el.firstChild.nodeValue = String(Math.round(end * e));
+          if (k < 1) requestAnimationFrame(step);
+        })(t0);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('[data-count]').forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---- card tilt + spotlight ---- */
+  if (!reduce && matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.tilt').forEach(function (c) {
+      c.addEventListener('pointermove', function (e) {
+        var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.setProperty('--mx', (x * 100) + '%'); c.style.setProperty('--my', (y * 100) + '%');
+        c.style.setProperty('--ry', ((x - 0.5) * 8).toFixed(2) + 'deg'); c.style.setProperty('--rx', ((0.5 - y) * 8).toFixed(2) + 'deg');
+      });
+      c.addEventListener('pointerleave', function () { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); });
+    });
+  }
+
+  /* ---- hero canvas: services (nodes) exchanging events (pulses) ---- */
+  var cv = document.getElementById('mesh');
+  var ctx = cv.getContext('2d');
+  var W = 0, H = 0, nodes = [], pulses = [], colors = {}, running = true, raf = 0, LINK = 150;
+  function readColors() {
+    var cs = getComputedStyle(root);
+    colors.a = cs.getPropertyValue('--accent').trim();
+    colors.b = cs.getPropertyValue('--accent-2').trim();
+    colors.muted = cs.getPropertyValue('--muted').trim();
+  }
+  function size() {
+    var r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var n = Math.round(Math.min(64, Math.max(20, W * H / 16000)));
+    nodes = [];
+    for (var i = 0; i < n; i++) nodes.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, r: 1.5 + Math.random() * 2 });
+    pulses = [];
+  }
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    var i, j, a, b, dx, dy, d;
+    if (!reduce) for (i = 0; i < nodes.length; i++) {
+      a = nodes[i]; a.x += a.vx; a.y += a.vy;
+      if (a.x < 0 || a.x > W) a.vx *= -1;
+      if (a.y < 0 || a.y > H) a.vy *= -1;
+    }
+    ctx.lineWidth = 1; ctx.strokeStyle = colors.muted;
+    for (i = 0; i < nodes.length; i++) for (j = i + 1; j < nodes.length; j++) {
+      a = nodes[i]; b = nodes[j]; dx = a.x - b.x; dy = a.y - b.y; d = Math.sqrt(dx * dx + dy * dy);
+      if (d < LINK) {
+        ctx.globalAlpha = (1 - d / LINK) * 0.45;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        if (!reduce && pulses.length < 26 && Math.random() < 0.0018) pulses.push({ a: a, b: b, t: 0, s: 0.008 + Math.random() * 0.012, c: Math.random() < 0.25 ? colors.b : colors.a });
+      }
+    }
+    ctx.fillStyle = colors.muted; ctx.globalAlpha = 0.65;
+    for (i = 0; i < nodes.length; i++) { a = nodes[i]; ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 6.283); ctx.fill(); }
+    for (i = pulses.length - 1; i >= 0; i--) {
+      var p = pulses[i]; p.t += p.s;
+      if (p.t >= 1) { pulses.splice(i, 1); continue; }
+      var x = p.a.x + (p.b.x - p.a.x) * p.t, y = p.a.y + (p.b.y - p.a.y) * p.t;
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = 0.22; ctx.beginPath(); ctx.arc(x, y, 7, 0, 6.283); ctx.fill();
+      ctx.globalAlpha = 1; ctx.beginPath(); ctx.arc(x, y, 2.6, 0, 6.283); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    if (running && !reduce) raf = requestAnimationFrame(frame);
+  }
+  readColors(); size(); frame();
+  addEventListener('resize', function () { size(); if (reduce) frame(); });
+  var mq = matchMedia('(prefers-color-scheme: dark)');
+  if (mq.addEventListener) mq.addEventListener('change', function () { readColors(); if (reduce) frame(); });
+  new MutationObserver(function () { readColors(); if (reduce) frame(); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  if ('IntersectionObserver' in window && !reduce) {
+    new IntersectionObserver(function (en) {
+      var vis = en[0].isIntersecting;
+      if (vis && !running) { running = true; raf = requestAnimationFrame(frame); }
+      if (!vis) { running = false; cancelAnimationFrame(raf); }
+    }).observe(cv);
+  }
 })();
 </script>
 </body>
