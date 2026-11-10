@@ -1,0 +1,438 @@
+<title>José Luis Orta</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="José Luis Orta Durán, Backend Engineering Lead. 15+ years building scalable distributed systems in Go and PHP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Sans:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single readable column; a left "event log" rail for experience, mono timestamps like log lines. */
+:root {
+  --bg: #f7f8f8;
+  --surface: #ffffff;
+  --fg: #16201f;
+  --muted: #5b6866;
+  --line: #dde3e2;
+  --accent: #0d7a5f;
+  --accent-soft: #e3f2ed;
+  --font-display: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.6rem;
+  --step-3: clamp(2.2rem, 6vw, 3.4rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1514; --surface: #151d1c; --fg: #e4ecea; --muted: #94a3a0;
+    --line: #26322f; --accent: #4fd1a5; --accent-soft: #173029; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1514; --surface: #151d1c; --fg: #e4ecea; --muted: #94a3a0;
+  --line: #26322f; --accent: #4fd1a5; --accent-soft: #173029; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+/* language switch: content duplicated per language */
+html:not([data-lang="es"]) [lang="es"] { display: none !important; }
+html[data-lang="es"] [lang="en"] { display: none !important; }
+
+.wrap {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg);
+}
+header.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+header.bar .wrap {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding-block: 0.75rem;
+}
+.mark { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); text-decoration: none; white-space: nowrap; }
+.mark b { color: var(--fg); font-weight: 500; }
+nav { display: flex; gap: 1.1rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+nav a { color: var(--muted); text-decoration: none; font-size: var(--step--1); }
+nav a:hover { color: var(--fg); }
+.lang-btn {
+  font: 500 var(--step--1)/1 var(--font-mono);
+  color: var(--fg); background: transparent;
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 0.4rem 0.7rem; cursor: pointer;
+}
+.lang-btn:hover { border-color: var(--accent); }
+@media (max-width: 560px) { nav a { display: none; } }
+
+main { display: grid; gap: 4.5rem; padding-block: 4rem 5rem; }
+
+.hero { display: grid; gap: 1.25rem; }
+.status {
+  display: inline-flex; align-items: center; gap: 0.5rem; width: fit-content;
+  font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted);
+}
+.status::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft);
+}
+h1 {
+  font-family: var(--font-display); font-size: var(--step-3); font-weight: 600;
+  line-height: 1.05; letter-spacing: -0.025em; margin: 0; text-wrap: balance;
+}
+.role { font-family: var(--font-display); font-size: var(--step-1); font-weight: 500; color: var(--accent); margin: 0; }
+.lede { font-size: 1.125rem; color: var(--muted); max-width: 36rem; margin: 0; }
+.facts {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 0.5rem 0 0; padding: 0; list-style: none;
+  font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted);
+}
+.facts strong { color: var(--fg); font-weight: 500; }
+.cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.65rem 1.1rem; border-radius: 8px; text-decoration: none;
+  font-weight: 500; font-size: 0.9375rem; border: 1px solid var(--line); color: var(--fg);
+}
+.btn.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn:hover { border-color: var(--accent); }
+.btn.primary:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+section { display: grid; gap: 1.5rem; scroll-margin-top: 5rem; }
+h2 {
+  font-family: var(--font-mono); font-size: var(--step--1); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+p { margin: 0; }
+.about p { max-width: 38rem; }
+.about { display: grid; gap: 1rem; }
+
+/* experience: event log */
+.log { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.25rem; }
+.log > li {
+  position: relative; padding-left: 1.75rem; display: grid; gap: 0.5rem; min-width: 0;
+}
+.log > li::before {
+  content: ""; position: absolute; left: 0; top: 0.45rem;
+  width: 9px; height: 9px; border-radius: 50%;
+  border: 2px solid var(--accent); background: var(--bg);
+}
+.log > li::after {
+  content: ""; position: absolute; left: 5px; top: 1.3rem; bottom: -2.25rem;
+  width: 1px; background: var(--line);
+}
+.log > li:last-child::after { display: none; }
+.log > li.current::before { background: var(--accent); }
+.when { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); font-variant-numeric: tabular-nums; }
+.what { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; line-height: 1.3; margin: 0; }
+.what span.org { color: var(--muted); font-weight: 500; }
+.log ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; color: var(--fg); }
+.log ul li::marker { color: var(--accent); }
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.25rem; }
+.tag {
+  font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 4px; padding: 0.1rem 0.45rem;
+}
+
+/* stack */
+.stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1.75rem 2rem; }
+.stack > div { display: grid; gap: 0.6rem; align-content: start; }
+.stack h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin: 0; }
+
+/* education & repos */
+.rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.rows li {
+  display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.25rem 1.25rem;
+  padding-block: 1rem; border-bottom: 1px solid var(--line);
+}
+.rows li > div { min-width: 0; display: grid; gap: 0.2rem; }
+.rows .title { font-weight: 600; }
+.rows .sub { color: var(--muted); font-size: 0.9375rem; }
+@media (max-width: 560px) { .rows li { grid-template-columns: 1fr; } }
+
+.repos { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+.repo {
+  display: grid; gap: 0.4rem; align-content: start; min-width: 0;
+  padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); text-decoration: none; color: var(--fg);
+}
+.repo:hover { border-color: var(--accent); }
+.repo .name { font-family: var(--font-mono); font-size: 0.875rem; color: var(--accent); overflow-wrap: anywhere; }
+.repo p { color: var(--muted); font-size: 0.9375rem; }
+.repo .lang { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); margin-top: auto; }
+
+.langs { display: flex; flex-wrap: wrap; gap: 0.75rem 2.5rem; margin: 0; padding: 0; list-style: none; }
+.langs li { display: grid; }
+.langs strong { font-family: var(--font-display); font-weight: 600; }
+.langs span { color: var(--muted); font-size: 0.9375rem; }
+
+.contact { display: grid; gap: 1rem; }
+.contact p { color: var(--muted); max-width: 34rem; }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap {
+  padding-block: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted);
+  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+}
+</style>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="mark" href="#top"><b>jl.orta</b> ~ backend</a>
+    <nav aria-label="Sections">
+      <a href="#about"><span lang="en">About</span><span lang="es">Sobre mí</span></a>
+      <a href="#experience"><span lang="en">Experience</span><span lang="es">Experiencia</span></a>
+      <a href="#stack">Stack</a>
+      <a href="#contact"><span lang="en">Contact</span><span lang="es">Contacto</span></a>
+      <button class="lang-btn" id="lang-toggle" type="button" aria-label="Cambiar idioma / Switch language">ES</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+  <section class="hero" aria-label="Intro">
+    <span class="status"><span lang="en">Barcelona, Spain</span><span lang="es">Barcelona, España</span></span>
+    <h1>José Luis Orta Durán</h1>
+    <p class="role">Backend Engineering Lead</p>
+    <p class="lede">
+      <span lang="en">Backend engineer with 15+ years of experience designing and building scalable distributed systems, from real-time telemetry ingestion to high-throughput data platforms.</span>
+      <span lang="es">Ingeniero backend con más de 15 años de experiencia diseñando y construyendo sistemas distribuidos escalables, desde ingesta de telemetría en tiempo real hasta plataformas de datos de alto rendimiento.</span>
+    </p>
+    <ul class="facts">
+      <li><strong>15+</strong> <span lang="en">years</span><span lang="es">años</span></li>
+      <li><strong>Go · PHP</strong></li>
+      <li><strong>DDD · CQRS · Event-driven</strong></li>
+    </ul>
+    <div class="cta">
+      <a class="btn primary" href="#experience"><span lang="en">See experience</span><span lang="es">Ver experiencia</span></a>
+      <a class="btn" href="https://github.com/tekoraik" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <h2><span lang="en">About</span><span lang="es">Sobre mí</span></h2>
+    <p lang="en">I lead backend teams and build the services behind them. Most recently at Wallbox I worked on Go platforms that ingest large volumes of real-time charger telemetry and power energy-efficiency features, while owning planning, roadmaps and delivery.</p>
+    <p lang="es">Lidero equipos backend y construyo los servicios que hay detrás. En Wallbox trabajé en plataformas en Go que ingieren grandes volúmenes de telemetría en tiempo real de los cargadores y dan soporte a funcionalidades de eficiencia energética, siendo responsable de la planificación, el roadmap y la entrega.</p>
+    <p lang="en">Before that I spent nine years at Emailing Network, growing from developer to team leader: microservices on Kubernetes, data pipelines with Airflow and Spark, and a core platform for user targeting and campaign delivery. I care about clear architecture, shared standards and systems that are easy to observe and operate.</p>
+    <p lang="es">Antes pasé nueve años en Emailing Network, de desarrollador a team leader: microservicios en Kubernetes, pipelines de datos con Airflow y Spark, y una plataforma core de segmentación de usuarios y envío de campañas. Me importan una arquitectura clara, los estándares compartidos y los sistemas fáciles de observar y operar.</p>
+  </section>
+
+  <section id="experience">
+    <h2><span lang="en">Experience</span><span lang="es">Experiencia</span></h2>
+    <ol class="log">
+      <li class="current">
+        <span class="when">2022-04 → 2025-05</span>
+        <h3 class="what">Backend Engineering Lead <span class="org">· Wallbox Chargers</span></h3>
+        <ul lang="en">
+          <li>Go services for large-scale telemetry ingestion and energy-efficiency platforms processing high volumes of real-time data.</li>
+          <li>Owned delivery, planning and execution, with predictable outcomes through clear goals, roadmaps and prioritization.</li>
+          <li>Worked with DevOps teams to improve system reliability and observability.</li>
+          <li>Built scalable, high-availability backend services using DDD, CQRS and event-driven architecture.</li>
+        </ul>
+        <ul lang="es">
+          <li>Servicios en Go para ingesta de telemetría a gran escala y plataformas de eficiencia energética con grandes volúmenes de datos en tiempo real.</li>
+          <li>Responsable de la entrega, planificación y ejecución, con resultados predecibles gracias a objetivos claros, roadmaps y priorización.</li>
+          <li>Colaboración con los equipos de DevOps para mejorar la fiabilidad y la observabilidad de los sistemas.</li>
+          <li>Servicios backend escalables y de alta disponibilidad con DDD, CQRS y arquitectura orientada a eventos.</li>
+        </ul>
+        <div class="tags"><span class="tag">Go</span><span class="tag">DDD</span><span class="tag">CQRS</span><span class="tag">Event-driven</span><span class="tag">Observability</span></div>
+      </li>
+      <li>
+        <span class="when">2019-06 → 2022-04</span>
+        <h3 class="what">Senior Software Engineer / Team Leader <span class="org">· Emailing Network</span></h3>
+        <ul lang="en">
+          <li>Translated business requirements into scalable technical solutions together with stakeholders.</li>
+          <li>Led the design and implementation of a core platform for user targeting and campaign delivery, handling large-scale data processing and high-throughput workloads.</li>
+          <li>Defined and promoted shared architectural standards adopted across multiple teams.</li>
+        </ul>
+        <ul lang="es">
+          <li>Traducción de requisitos de negocio en soluciones técnicas escalables junto a stakeholders.</li>
+          <li>Lideré el diseño e implementación de una plataforma core de segmentación de usuarios y envío de campañas, con procesamiento de datos a gran escala y cargas de alto rendimiento.</li>
+          <li>Definí y promoví estándares de arquitectura compartidos, adoptados por varios equipos.</li>
+        </ul>
+        <div class="tags"><span class="tag">Leadership</span><span class="tag">Architecture</span><span class="tag">High throughput</span></div>
+      </li>
+      <li>
+        <span class="when">2013-06 → 2019</span>
+        <h3 class="what">Senior Software Development Engineer <span class="org">· Emailing Network</span></h3>
+        <ul lang="en">
+          <li>Designed and implemented a microservices architecture on Kubernetes for scalable, fault-tolerant distributed systems.</li>
+          <li>Built and optimized large-scale data pipelines with Airflow, Spark on EMR, ETLs, an S3 data lake and Redshift.</li>
+          <li>Implemented and maintained CI/CD pipelines to automate testing, deployments and releases.</li>
+          <li>Built backend services in PHP on AWS following DDD and microservices principles.</li>
+        </ul>
+        <ul lang="es">
+          <li>Diseño e implementación de una arquitectura de microservicios en Kubernetes para sistemas distribuidos escalables y tolerantes a fallos.</li>
+          <li>Pipelines de datos a gran escala con Airflow, Spark sobre EMR, ETLs, data lake en S3 y Redshift.</li>
+          <li>Pipelines de CI/CD para automatizar tests, despliegues y releases.</li>
+          <li>Servicios backend en PHP sobre AWS siguiendo DDD y principios de microservicios.</li>
+        </ul>
+        <div class="tags"><span class="tag">PHP</span><span class="tag">Kubernetes</span><span class="tag">AWS</span><span class="tag">Airflow</span><span class="tag">Spark</span><span class="tag">Redshift</span></div>
+      </li>
+      <li>
+        <span class="when">2009-09 → 2013-09</span>
+        <h3 class="what">Software Developer <span class="org">· Auxmen</span></h3>
+        <p class="sub" style="color:var(--muted)">Sant Andreu de la Barca</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="stack">
+    <h2>Stack</h2>
+    <div class="stack">
+      <div>
+        <h3><span lang="en">Languages</span><span lang="es">Lenguajes</span></h3>
+        <div class="tags"><span class="tag">Go</span><span class="tag">PHP</span><span class="tag">JavaScript</span><span class="tag">SQL</span></div>
+      </div>
+      <div>
+        <h3><span lang="en">Architecture</span><span lang="es">Arquitectura</span></h3>
+        <div class="tags"><span class="tag">DDD</span><span class="tag">CQRS</span><span class="tag">Event-driven</span><span class="tag">Microservices</span></div>
+      </div>
+      <div>
+        <h3><span lang="en">Infrastructure</span><span lang="es">Infraestructura</span></h3>
+        <div class="tags"><span class="tag">AWS</span><span class="tag">Kubernetes</span><span class="tag">Docker</span><span class="tag">CI/CD</span></div>
+      </div>
+      <div>
+        <h3><span lang="en">Data</span><span lang="es">Datos</span></h3>
+        <div class="tags"><span class="tag">Airflow</span><span class="tag">Spark / EMR</span><span class="tag">S3 data lake</span><span class="tag">Redshift</span><span class="tag">ETL</span></div>
+      </div>
+      <div>
+        <h3><span lang="en">Quality</span><span lang="es">Calidad</span></h3>
+        <div class="tags"><span class="tag">TDD</span><span class="tag">PHPUnit</span><span class="tag">Codeception</span><span class="tag">Observability</span></div>
+      </div>
+      <div>
+        <h3><span lang="en">Leadership</span><span lang="es">Liderazgo</span></h3>
+        <div class="tags"><span class="tag">Roadmaps</span><span class="tag">Planning</span><span class="tag">Tech standards</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <h2><span lang="en">Education</span><span lang="es">Formación</span></h2>
+    <ul class="rows">
+      <li><span class="when">2017 – 2018</span><div>
+        <span class="title"><span lang="en">Postgraduate, Business Intelligence &amp; Big Data</span><span lang="es">Posgrado en Business Intelligence y Big Data</span></span>
+        <span class="sub">Universitat Oberta de Catalunya</span>
+        <span class="sub"><span lang="en">Final project: a data warehouse built on Barcelona Open Data to analyse public transport.</span><span lang="es">Proyecto final: data warehouse con el Open Data de Barcelona para analizar el transporte público.</span></span>
+      </div></li>
+      <li><span class="when">2010 – 2014</span><div>
+        <span class="title"><span lang="en">Degree in Software Engineering</span><span lang="es">Grado en Ingeniería del Software</span></span>
+        <span class="sub">UPC · Facultat d'Informàtica de Barcelona</span>
+      </div></li>
+      <li><span class="when">2012 – 2013</span><div>
+        <span class="title"><span lang="en">Internship, High Performance JavaScript</span><span lang="es">Prácticas, JavaScript de alto rendimiento</span></span>
+        <span class="sub">Softonic, Barcelona · TDD, HTML5, Responsive Design</span>
+      </div></li>
+      <li><span class="when">2008 – 2010</span><div>
+        <span class="title"><span lang="en">Higher VET, Software Application Development</span><span lang="es">CFGS Desarrollo de Aplicaciones Informáticas</span></span>
+        <span class="sub">IES La Mercè, Barcelona</span>
+      </div></li>
+      <li><span class="when">2008 – 2010</span><div>
+        <span class="title"><span lang="en">VET, Computer Systems Operation</span><span lang="es">CFGM Explotación de Sistemas Informáticos</span></span>
+        <span class="sub">IES Gabriela Mistral, Sant Vicenç dels Horts</span>
+      </div></li>
+    </ul>
+  </section>
+
+  <section id="open-source">
+    <h2>Open source</h2>
+    <div class="repos">
+      <a class="repo" href="https://github.com/tekoraik/trex-codeception-selenium" target="_blank" rel="noopener">
+        <span class="name">trex-codeception-selenium</span>
+        <p lang="en">Codeception extension that starts a Selenium server before the acceptance suite and stops it at the end.</p>
+        <p lang="es">Extensión de Codeception que arranca Selenium antes de los tests de aceptación y lo detiene al terminar.</p>
+        <span class="lang">PHP</span>
+      </a>
+      <a class="repo" href="https://github.com/tekoraik/trex-yii-artimestamps" target="_blank" rel="noopener">
+        <span class="name">trex-yii-artimestamps</span>
+        <p lang="en">Yii ActiveRecord behaviour that manages created_at and updated_at with date formatting.</p>
+        <p lang="es">Behaviour para ActiveRecord de Yii que gestiona created_at y updated_at con formato de fecha.</p>
+        <span class="lang">PHP</span>
+      </a>
+      <a class="repo" href="https://github.com/tekoraik/phpunit-docker" target="_blank" rel="noopener">
+        <span class="name">phpunit-docker</span>
+        <p lang="en">Docker image for running PHPUnit test suites.</p>
+        <p lang="es">Imagen Docker para ejecutar suites de PHPUnit.</p>
+        <span class="lang">Dockerfile</span>
+      </a>
+      <a class="repo" href="https://github.com/tekoraik/pedidos" target="_blank" rel="noopener">
+        <span class="name">pedidos</span>
+        <p lang="en">Order management application built as my final degree project.</p>
+        <p lang="es">Aplicación de gestión de pedidos, mi proyecto final de grado.</p>
+        <span class="lang">PHP</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="languages">
+    <h2><span lang="en">Languages</span><span lang="es">Idiomas</span></h2>
+    <ul class="langs">
+      <li><strong><span lang="en">Spanish</span><span lang="es">Español</span></strong><span><span lang="en">Native</span><span lang="es">Nativo</span></span></li>
+      <li><strong><span lang="en">Catalan</span><span lang="es">Catalán</span></strong><span><span lang="en">Native</span><span lang="es">Nativo</span></span></li>
+      <li><strong><span lang="en">English</span><span lang="es">Inglés</span></strong><span><span lang="en">Professional working proficiency</span><span lang="es">Nivel profesional</span></span></li>
+    </ul>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2><span lang="en">Contact</span><span lang="es">Contacto</span></h2>
+    <p lang="en">Open to backend leadership and senior engineering roles. The quickest way to reach me is through GitHub.</p>
+    <p lang="es">Abierto a puestos de liderazgo backend e ingeniería senior. La forma más rápida de contactarme es a través de GitHub.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/tekoraik" target="_blank" rel="noopener">github.com/tekoraik ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 José Luis Orta Durán</span>
+    <span>Barcelona</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('lang-toggle');
+  function apply(lang) {
+    root.setAttribute('data-lang', lang);
+    root.setAttribute('lang', lang);
+    btn.textContent = lang === 'en' ? 'ES' : 'EN';
+  }
+  var saved = null;
+  try { saved = localStorage.getItem('lang'); } catch (e) {}
+  if (saved !== 'en' && saved !== 'es') {
+    saved = (navigator.language || 'en').toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
+  }
+  apply(saved);
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-lang') === 'en' ? 'es' : 'en';
+    apply(next);
+    try { localStorage.setItem('lang', next); } catch (e) {}
+  });
+})();
+</script>
